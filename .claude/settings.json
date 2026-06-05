@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir \"C:\\\\Users\\\\granj\\\\Desktop\\\\amapola\")",
+      "Bash(Get-ChildItem \"C:\\\\Users\\\\granj\\\\Desktop\\\\amapola\" -Force)",
+      "Read(//c/Users/granj/.claude/projects/c--Users-granj/memory/**)"
+    ]
+  }
+}
