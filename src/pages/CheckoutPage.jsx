@@ -1,21 +1,23 @@
-import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { ChevronLeft, ShoppingBag } from 'lucide-react'
-import { useCart } from '../hooks/useCart'
-import CheckoutForm from '../components/checkout/CheckoutForm'
-import { useCatalogStore } from '../store/catalogStore'
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { ChevronLeft, ShoppingBag } from "lucide-react";
+import { useCart } from "../hooks/useCart";
+import CheckoutForm from "../components/checkout/CheckoutForm";
+import { useCatalogStore } from "../store/catalogStore";
 
-const CHECKOUT_IMAGE = 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=1400&q=80&auto=format&fit=crop'
-const EMPTY_IMAGE = 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=1400&q=80&auto=format&fit=crop'
+const CHECKOUT_IMAGE =
+  "https://images.unsplash.com/photo-1632657600101-cd38ed89d179?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+const EMPTY_IMAGE =
+  "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=1400&q=80&auto=format&fit=crop";
 
 export default function CheckoutPage() {
-  const { items } = useCart()
-  const navigate = useNavigate()
-  const fetchStoreConfig = useCatalogStore(s => s.fetchStoreConfig)
+  const { items } = useCart();
+  const navigate = useNavigate();
+  const fetchStoreConfig = useCatalogStore((s) => s.fetchStoreConfig);
 
   useEffect(() => {
-    fetchStoreConfig()
-  }, []) // eslint-disable-line
+    fetchStoreConfig();
+  }, []); // eslint-disable-line
 
   if (items.length === 0) {
     return (
@@ -30,7 +32,10 @@ export default function CheckoutPage() {
         {/* Overlay */}
         <div
           className="absolute inset-0"
-          style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.72) 100%)' }}
+          style={{
+            background:
+              "linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.72) 100%)",
+          }}
         />
         {/* Contenido */}
         <div className="relative z-10 flex flex-col items-center text-center px-6 gap-5">
@@ -38,13 +43,16 @@ export default function CheckoutPage() {
             <ShoppingBag className="w-7 h-7 text-white" strokeWidth={1.5} />
           </div>
           <div>
-            <h2 className="text-white text-2xl font-bold mb-2">Tu carrito está vacío</h2>
+            <h2 className="text-white text-2xl font-bold mb-2">
+              Tu carrito está vacío
+            </h2>
             <p className="text-white/70 text-sm max-w-xs">
-              Elegí tus panificados favoritos y volvé acá para completar tu pedido.
+              Elegí tus panificados favoritos y volvé acá para completar tu
+              pedido.
             </p>
           </div>
           <button
-            onClick={() => navigate('/')}
+            onClick={() => navigate("/")}
             className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#E8660A] hover:bg-[#C25508] text-white font-semibold text-sm transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
           >
             Ver productos
@@ -52,12 +60,20 @@ export default function CheckoutPage() {
         </div>
         {/* Wave inferior */}
         <div className="absolute bottom-0 left-0 right-0">
-          <svg viewBox="0 0 1440 50" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full">
-            <path d="M0 50L1440 50L1440 20C1200 50 960 5 720 20C480 35 240 0 0 20L0 50Z" fill="#FAFAF8"/>
+          <svg
+            viewBox="0 0 1440 50"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-full"
+          >
+            <path
+              d="M0 50L1440 50L1440 20C1200 50 960 5 720 20C480 35 240 0 0 20L0 50Z"
+              fill="#FAFAF8"
+            />
           </svg>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -72,12 +88,23 @@ export default function CheckoutPage() {
         />
         <div
           className="absolute inset-0"
-          style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.6) 100%)' }}
+          style={{
+            background:
+              "linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.6) 100%)",
+          }}
         />
         {/* Wave inferior */}
         <div className="absolute bottom-0 left-0 right-0">
-          <svg viewBox="0 0 1440 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full">
-            <path d="M0 40L1440 40L1440 15C1200 40 960 0 720 15C480 30 240 0 0 15L0 40Z" fill="#FAFAF8"/>
+          <svg
+            viewBox="0 0 1440 40"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-full"
+          >
+            <path
+              d="M0 40L1440 40L1440 15C1200 40 960 0 720 15C480 30 240 0 0 15L0 40Z"
+              fill="#FAFAF8"
+            />
           </svg>
         </div>
         {/* Texto sobre imagen */}
@@ -103,5 +130,5 @@ export default function CheckoutPage() {
         <CheckoutForm />
       </div>
     </>
-  )
+  );
 }
