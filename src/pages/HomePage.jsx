@@ -23,10 +23,13 @@ export default function HomePage() {
     setCategory,
     setSearchQuery,
     fetchProducts,
+    categories,
+    fetchCategories,
   } = useProducts()
 
   useEffect(() => {
     fetchProducts()
+    fetchCategories()
   }, []) // eslint-disable-line
 
   return (
@@ -117,7 +120,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        <CategoryFilter active={activeCategory} onChange={setCategory} />
+        <CategoryFilter active={activeCategory} onChange={setCategory} categories={categories} />
       </section>
 
       {/* Grid de productos */}

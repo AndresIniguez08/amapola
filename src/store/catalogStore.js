@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabase'
 
 export const useCatalogStore = create((set, get) => ({
   products: [],
+  categories: [],
   storeConfig: {},
   loading: false,
   error: null,
@@ -25,6 +26,20 @@ export const useCatalogStore = create((set, get) => ({
       set({ error: err.message })
     } finally {
       set({ loading: false })
+    }
+  },
+
+  async fetchCategories() {
+    try {
+      const { data, error } = await supabase
+        .from('categories')
+        .select('*')
+        .eq('is_active', true)
+        .order('position')
+      if (error) throw error
+      set({ categories: data ?? [] })
+    } catch (err) {
+      console.error('Error loading categories:', err)
     }
   },
 

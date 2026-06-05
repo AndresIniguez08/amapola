@@ -8,7 +8,6 @@ import { supabase } from '../../lib/supabase'
 import Button from '../ui/Button'
 import ImageUploader from './ImageUploader'
 
-const CATEGORIES = ['Medialunas', 'Panes', 'Budines', 'Snacks', 'Otros']
 const PRESET_TAGS = ['Sin TACC', 'Vegano', 'Integral', 'Destacado']
 
 const schema = z.object({
@@ -39,7 +38,7 @@ function Toggle({ checked, onChange, label }) {
   )
 }
 
-export default function ProductForm({ product, onSuccess, onCancel }) {
+export default function ProductForm({ product, onSuccess, onCancel, categories = [] }) {
   const [loading, setLoading] = useState(false)
   const isEdit = Boolean(product?.id)
 
@@ -170,8 +169,11 @@ export default function ProductForm({ product, onSuccess, onCancel }) {
             {...register('category')}
             className="w-full px-4 py-2.5 text-sm border border-border rounded-btn focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-surface"
           >
-            <option value="">Seleccioná</option>
-            {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
+            {categories.length === 0
+              ? <option value="" disabled>Cargando categorías...</option>
+              : <option value="">Seleccioná</option>
+            }
+            {categories.map(c => <option key={c.id} value={c.name}>{c.name}</option>)}
           </select>
           {errors.category && <p className="text-error text-xs mt-1">{errors.category.message}</p>}
         </div>

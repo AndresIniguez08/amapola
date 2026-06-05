@@ -17,6 +17,7 @@ const AdminDashboardPage = lazy(
 const AdminProductsPage = lazy(() => import("./pages/admin/AdminProductsPage"));
 const AdminConfigPage = lazy(() => import("./pages/admin/AdminConfigPage"));
 const AdminOrdersPage = lazy(() => import("./pages/admin/AdminOrdersPage"));
+const AdminCategoriesPage = lazy(() => import("./pages/admin/AdminCategoriesPage"));
 
 function AdminGuard({ children }) {
   const session = useAuthStore((s) => s.session);
@@ -75,6 +76,14 @@ export default function App() {
             element={
               <AdminGuard>
                 <AdminOrdersPage />
+              </AdminGuard>
+            }
+          />
+          <Route
+            path="admin/categorias"
+            element={
+              <AdminGuard>
+                <AdminCategoriesPage />
               </AdminGuard>
             }
           />

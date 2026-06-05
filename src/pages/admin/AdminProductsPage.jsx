@@ -11,6 +11,7 @@ import CategoryFilter from '../../components/catalog/CategoryFilter'
 
 export default function AdminProductsPage() {
   const [products, setProducts] = useState([])
+  const [categories, setCategories] = useState([])
   const [loading, setLoading] = useState(true)
   const [modalOpen, setModalOpen] = useState(false)
   const [editProduct, setEditProduct] = useState(null)
@@ -29,6 +30,11 @@ export default function AdminProductsPage() {
 
   useEffect(() => {
     fetchProducts()
+    async function loadCategories() {
+      const { data } = await supabase.from('categories').select('*').eq('is_active', true).order('position')
+      setCategories(data ?? [])
+    }
+    loadCategories()
   }, [fetchProducts])
 
   function openCreate() {
@@ -72,7 +78,7 @@ export default function AdminProductsPage() {
 
       <div className="space-y-3 mb-5">
         <SearchBar value={search} onChange={setSearch} />
-        <CategoryFilter active={category} onChange={setCategory} />
+        <CategoryFilter active={category} onChange={setCategory} categories={categories} />
       </div>
 
       {loading ? (
@@ -102,6 +108,7 @@ export default function AdminProductsPage() {
                 product={editProduct}
                 onSuccess={handleSuccess}
                 onCancel={closeModal}
+                categories={categories}
               />
             </div>
           </div>

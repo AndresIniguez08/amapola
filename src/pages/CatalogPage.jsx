@@ -13,17 +13,20 @@ export default function CatalogPage() {
     setCategory,
     setSearchQuery,
     fetchProducts,
+    categories,
+    fetchCategories,
   } = useProducts()
 
   useEffect(() => {
     fetchProducts()
+    fetchCategories()
   }, []) // eslint-disable-line
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8 space-y-5">
       <h1 className="text-2xl font-bold text-text-primary">Catálogo</h1>
       <SearchBar value={searchQuery} onChange={setSearchQuery} />
-      <CategoryFilter active={activeCategory} onChange={setCategory} />
+      <CategoryFilter active={activeCategory} onChange={setCategory} categories={categories} />
       <ProductGrid
         products={filteredProducts}
         loading={loading}

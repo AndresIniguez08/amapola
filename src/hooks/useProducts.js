@@ -9,6 +9,8 @@ export function useProducts() {
   const searchQuery = useCatalogStore(s => s.searchQuery)
   const fetchProducts = useCatalogStore(s => s.fetchProducts)
   const fetchStoreConfig = useCatalogStore(s => s.fetchStoreConfig)
+  const categories = useCatalogStore(s => s.categories)
+  const fetchCategories = useCatalogStore(s => s.fetchCategories)
   const setCategory = useCatalogStore(s => s.setCategory)
   const setSearchQuery = useCatalogStore(s => s.setSearchQuery)
   const getFilteredProducts = useCatalogStore(s => s.getFilteredProducts)
@@ -23,6 +25,8 @@ const filteredProducts = getFilteredProducts()
     searchQuery,
     fetchProducts,
     fetchStoreConfig,
+    categories,
+    fetchCategories,
     setCategory,
     setSearchQuery,
     filteredProducts,
