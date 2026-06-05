@@ -1,23 +1,28 @@
-import { lazy, Suspense } from 'react'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import Layout from './components/layout/Layout'
-import Spinner from './components/ui/Spinner'
-import { useAuthStore } from './store/authStore'
+import { lazy, Suspense, useEffect } from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import Layout from "./components/layout/Layout";
+import Spinner from "./components/ui/Spinner";
+import { useAuthStore } from "./store/authStore";
 
-const HomePage = lazy(() => import('./pages/HomePage'))
-const CatalogPage = lazy(() => import('./pages/CatalogPage'))
-const CheckoutPage = lazy(() => import('./pages/CheckoutPage'))
-const OrderConfirmationPage = lazy(() => import('./pages/OrderConfirmationPage'))
-const AdminLoginPage = lazy(() => import('./pages/admin/AdminLoginPage'))
-const AdminDashboardPage = lazy(() => import('./pages/admin/AdminDashboardPage'))
-const AdminProductsPage = lazy(() => import('./pages/admin/AdminProductsPage'))
-const AdminConfigPage = lazy(() => import('./pages/admin/AdminConfigPage'))
+const HomePage = lazy(() => import("./pages/HomePage"));
+const CatalogPage = lazy(() => import("./pages/CatalogPage"));
+const CheckoutPage = lazy(() => import("./pages/CheckoutPage"));
+const OrderConfirmationPage = lazy(
+  () => import("./pages/OrderConfirmationPage"),
+);
+const AdminLoginPage = lazy(() => import("./pages/admin/AdminLoginPage"));
+const AdminDashboardPage = lazy(
+  () => import("./pages/admin/AdminDashboardPage"),
+);
+const AdminProductsPage = lazy(() => import("./pages/admin/AdminProductsPage"));
+const AdminConfigPage = lazy(() => import("./pages/admin/AdminConfigPage"));
+const AdminOrdersPage = lazy(() => import("./pages/admin/AdminOrdersPage"));
 
 function AdminGuard({ children }) {
-  const session = useAuthStore(s => s.session)
-  if (session === undefined) return <PageSpinner />
-  if (!session) return <Navigate to="/admin/login" replace />
-  return children
+  const session = useAuthStore((s) => s.session);
+  if (session === undefined) return <PageSpinner />;
+  if (!session) return <Navigate to="/admin/login" replace />;
+  return children;
 }
 
 function PageSpinner() {
@@ -25,10 +30,16 @@ function PageSpinner() {
     <div className="min-h-screen flex items-center justify-center bg-background">
       <Spinner size="lg" />
     </div>
-  )
+  );
 }
 
 export default function App() {
+  const init = useAuthStore((s) => s.init);
+
+  useEffect(() => {
+    init();
+  }, []); // eslint-disable-line
+
   return (
     <BrowserRouter>
       <Suspense fallback={<PageSpinner />}>
@@ -37,7 +48,10 @@ export default function App() {
             <Route index element={<HomePage />} />
             <Route path="catalogo" element={<CatalogPage />} />
             <Route path="checkout" element={<CheckoutPage />} />
-            <Route path="pedido-confirmado" element={<OrderConfirmationPage />} />
+            <Route
+              path="pedido-confirmado"
+              element={<OrderConfirmationPage />}
+            />
           </Route>
           <Route path="admin/login" element={<AdminLoginPage />} />
           <Route
@@ -57,6 +71,14 @@ export default function App() {
             }
           />
           <Route
+            path="admin/pedidos"
+            element={
+              <AdminGuard>
+                <AdminOrdersPage />
+              </AdminGuard>
+            }
+          />
+          <Route
             path="admin/configuracion"
             element={
               <AdminGuard>
@@ -67,5 +89,5 @@ export default function App() {
         </Routes>
       </Suspense>
     </BrowserRouter>
-  )
+  );
 }

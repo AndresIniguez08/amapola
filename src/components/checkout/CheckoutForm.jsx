@@ -14,6 +14,7 @@ import {
 import { useCart } from '../../hooks/useCart'
 import { useCatalogStore } from '../../store/catalogStore'
 import { generateWhatsAppMessage, openWhatsApp } from '../../lib/whatsapp'
+import { saveOrder } from '../../lib/orders'
 
 const schema = z
   .object({
@@ -104,20 +105,20 @@ export default function CheckoutForm() {
       return
     }
     const whatsappNumber = storeConfig.whatsapp_number
-    console.log('whatsappNumber:', whatsappNumber)
-    console.log('storeConfig:', storeConfig)
     if (!whatsappNumber) {
       toast.error('No se pudo obtener el número de WhatsApp. Intentá de nuevo.')
       return
     }
     setSending(true)
     try {
+      await saveOrder(items, data, storeConfig)
       const message = generateWhatsAppMessage(items, data, storeConfig)
       openWhatsApp(message, whatsappNumber)
       clearCart()
       navigate('/pedido-confirmado')
-    } catch {
+    } catch (err) {
       toast.error('Hubo un error al generar el pedido.')
+      console.error(err)
     } finally {
       setSending(false)
     }

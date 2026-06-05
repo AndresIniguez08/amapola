@@ -1,9 +1,10 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { Package, Settings, LogOut, Flower, LayoutDashboard } from 'lucide-react'
+import { Package, Settings, LogOut, Flower, LayoutDashboard, ClipboardList } from 'lucide-react'
 import { useAuthStore } from '../../store/authStore'
 
 const NAV = [
   { to: '/admin', label: 'Dashboard', icon: LayoutDashboard },
+  { to: '/admin/pedidos', label: 'Pedidos', icon: ClipboardList },
   { to: '/admin/productos', label: 'Productos', icon: Package },
   { to: '/admin/configuracion', label: 'Configuración', icon: Settings },
 ]

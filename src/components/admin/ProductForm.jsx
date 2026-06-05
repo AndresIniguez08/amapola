@@ -15,6 +15,7 @@ const schema = z.object({
   name: z.string().min(2, 'Requerido'),
   description: z.string().optional(),
   price: z.coerce.number().positive('Precio inválido'),
+  cost: z.coerce.number().min(0).optional(),
   category: z.string().min(1, 'Elegí una categoría'),
   is_available: z.boolean(),
   is_featured: z.boolean(),
@@ -55,6 +56,7 @@ export default function ProductForm({ product, onSuccess, onCancel }) {
       name: product?.name ?? '',
       description: product?.description ?? '',
       price: product?.price ?? '',
+      cost: product?.cost ?? 0,
       category: product?.category ?? '',
       is_available: product?.is_available ?? true,
       is_featured: product?.is_featured ?? false,
@@ -144,6 +146,19 @@ export default function ProductForm({ product, onSuccess, onCancel }) {
             className="w-full px-4 py-2.5 text-sm border border-border rounded-btn focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
           />
           {errors.price && <p className="text-error text-xs mt-1">{errors.price.message}</p>}
+        </div>
+
+        {/* Cost */}
+        <div>
+          <label className="block text-sm font-semibold text-text-primary mb-1.5">Costo (ARS)</label>
+          <input
+            {...register('cost')}
+            type="number"
+            inputMode="numeric"
+            step="0.01"
+            placeholder="0"
+            className="w-full px-4 py-2.5 text-sm border border-border rounded-btn focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+          />
         </div>
 
         {/* Category */}
