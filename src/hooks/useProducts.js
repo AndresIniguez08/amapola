@@ -1,38 +1,30 @@
-import { useEffect } from 'react'
 import { useCatalogStore } from '../store/catalogStore'
 
 export function useProducts() {
-  const {
-    products,
-    loading,
-    error,
-    fetchProducts,
-    fetchStoreConfig,
-    filteredProducts,
-    activeCategory,
-    searchQuery,
-    setCategory,
-    setSearchQuery,
-    storeConfig,
-  } = useCatalogStore()
-
-  useEffect(() => {
-    if (products.length === 0) {
-      fetchProducts()
-      fetchStoreConfig()
-    }
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  const products = useCatalogStore(s => s.products)
+  const storeConfig = useCatalogStore(s => s.storeConfig)
+  const loading = useCatalogStore(s => s.loading)
+  const error = useCatalogStore(s => s.error)
+  const activeCategory = useCatalogStore(s => s.activeCategory)
+  const searchQuery = useCatalogStore(s => s.searchQuery)
+  const fetchProducts = useCatalogStore(s => s.fetchProducts)
+  const fetchStoreConfig = useCatalogStore(s => s.fetchStoreConfig)
+  const setCategory = useCatalogStore(s => s.setCategory)
+  const setSearchQuery = useCatalogStore(s => s.setSearchQuery)
+  const getFilteredProducts = useCatalogStore(s => s.getFilteredProducts)
+const filteredProducts = getFilteredProducts()
 
   return {
     products,
-    filteredProducts,
+    storeConfig,
     loading,
     error,
-    storeConfig,
     activeCategory,
     searchQuery,
+    fetchProducts,
+    fetchStoreConfig,
     setCategory,
     setSearchQuery,
-    refetch: fetchProducts,
+    filteredProducts,
   }
 }

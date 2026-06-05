@@ -47,20 +47,20 @@ export const useCatalogStore = create((set, get) => ({
     set({ searchQuery: query })
   },
 
-  get filteredProducts() {
-    const { products, activeCategory, searchQuery } = get()
-    let result = products
-    if (activeCategory !== 'todo') {
-      result = result.filter(p => p.category === activeCategory)
-    }
-    if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase()
-      result = result.filter(
-        p =>
-          p.name.toLowerCase().includes(q) ||
-          (p.description ?? '').toLowerCase().includes(q),
-      )
-    }
-    return result
-  },
+  getFilteredProducts() {
+  const { products, activeCategory, searchQuery } = get()
+  let result = products
+  if (activeCategory !== 'todo') {
+    result = result.filter(p => p.category === activeCategory)
+  }
+  if (searchQuery.trim()) {
+    const q = searchQuery.toLowerCase()
+    result = result.filter(
+      p =>
+        p.name.toLowerCase().includes(q) ||
+        (p.description ?? '').toLowerCase().includes(q)
+    )
+  }
+  return result
+},
 }))

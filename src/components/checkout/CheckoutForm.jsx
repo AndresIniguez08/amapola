@@ -1,11 +1,10 @@
+import { forwardRef, useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { MessageCircle } from 'lucide-react'
+import { MessageCircle, User, Phone, FileText } from 'lucide-react'
 import toast from 'react-hot-toast'
-import Button from '../ui/Button'
 import OrderSummary from './OrderSummary'
 import {
   PaymentMethodSelector,
@@ -36,28 +35,42 @@ const schema = z
 
 function FieldError({ message }) {
   if (!message) return null
-  return <p className="text-error text-xs mt-1">{message}</p>
+  return <p className="text-red-500 text-xs mt-1.5 flex items-center gap-1">⚠ {message}</p>
 }
 
-function Label({ children, required }) {
+function SectionHeader({ number, title, subtitle }) {
   return (
-    <label className="block text-sm font-semibold text-text-primary mb-1.5">
-      {children}
-      {required && <span className="text-error ml-0.5">*</span>}
-    </label>
+    <div className="flex items-center gap-3 mb-5">
+      <div className="w-7 h-7 rounded-full bg-[#E8660A] text-white text-xs font-bold flex items-center justify-center flex-shrink-0">
+        {number}
+      </div>
+      <div>
+        <h2 className="font-bold text-stone-800 text-sm leading-tight">{title}</h2>
+        {subtitle && <p className="text-stone-400 text-xs">{subtitle}</p>}
+      </div>
+    </div>
   )
 }
 
-function Input({ error, ...props }) {
+const FloatingInput = forwardRef(function FloatingInput({ label, icon: Icon, error, ...props }, ref) {
   return (
-    <input
-      className={`w-full px-4 py-3 text-sm bg-surface border rounded-btn text-text-primary placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all ${
-        error ? 'border-error' : 'border-border'
-      }`}
-      {...props}
-    />
+    <div className="relative">
+      {Icon && (
+        <div className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none">
+          <Icon className="w-4 h-4 text-stone-400" strokeWidth={1.8} />
+        </div>
+      )}
+      <input
+        ref={ref}
+        placeholder={label}
+        className={`w-full ${Icon ? 'pl-10' : 'pl-4'} pr-4 py-3.5 text-sm bg-white border-2 rounded-xl text-stone-800 placeholder-stone-400 focus:outline-none focus:border-[#E8660A] transition-all duration-200 ${
+          error ? 'border-red-400 bg-red-50/30' : 'border-stone-200 hover:border-stone-300'
+        }`}
+        {...props}
+      />
+    </div>
   )
-}
+})
 
 export default function CheckoutForm() {
   const { items, subtotal, clearCart } = useCart()
@@ -90,13 +103,13 @@ export default function CheckoutForm() {
       toast.error('Tu carrito está vacío')
       return
     }
-
     const whatsappNumber = storeConfig.whatsapp_number
+    console.log('whatsappNumber:', whatsappNumber)
+    console.log('storeConfig:', storeConfig)
     if (!whatsappNumber) {
       toast.error('No se pudo obtener el número de WhatsApp. Intentá de nuevo.')
       return
     }
-
     setSending(true)
     try {
       const message = generateWhatsAppMessage(items, data, storeConfig)
@@ -111,120 +124,121 @@ export default function CheckoutForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} noValidate>
-      <div className="max-w-2xl mx-auto space-y-6">
+    <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4">
 
-        {/* Order summary */}
-        <OrderSummary deliveryFee={currentDeliveryFee} />
+      <OrderSummary deliveryFee={currentDeliveryFee} />
 
-        {/* Personal data */}
-        <section className="bg-surface rounded-card border border-border p-5 space-y-4">
-          <h2 className="font-bold text-text-primary">Tus datos</h2>
-
+      <div className="bg-white rounded-2xl border border-stone-100 shadow-sm p-5">
+        <SectionHeader number="1" title="Tus datos" subtitle="Necesitamos saber quién hace el pedido" />
+        <div className="space-y-3">
           <div>
-            <Label required>Nombre completo</Label>
-            <Input
-              {...register('name')}
-              placeholder="Juan Pérez"
-              autoComplete="name"
+            <FloatingInput
+              label="Nombre completo"
+              icon={User}
               error={errors.name}
+              autoComplete="name"
+              {...register('name')}
             />
             <FieldError message={errors.name?.message} />
           </div>
-
           <div>
-            <Label required>Teléfono</Label>
-            <Input
-              {...register('phone')}
+            <FloatingInput
+              label="Teléfono"
+              icon={Phone}
+              error={errors.phone}
               type="tel"
               inputMode="tel"
-              placeholder="11 2345-6789"
               autoComplete="tel"
-              error={errors.phone}
+              {...register('phone')}
             />
             <FieldError message={errors.phone?.message} />
           </div>
-
-          <div>
-            <Label>Observaciones</Label>
+          <div className="relative">
+            <FileText className="absolute left-3.5 top-3.5 w-4 h-4 text-stone-400 pointer-events-none" strokeWidth={1.8} />
             <textarea
               {...register('notes')}
-              placeholder="Sin sal, sin TACC, o cualquier detalle adicional..."
+              placeholder="Observaciones (sin sal, sin TACC, etc.)"
               rows={3}
-              className="w-full px-4 py-3 text-sm bg-surface border border-border rounded-btn text-text-primary placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all resize-none"
+              className="w-full pl-10 pr-4 py-3.5 text-sm bg-white border-2 border-stone-200 hover:border-stone-300 rounded-xl text-stone-800 placeholder-stone-400 focus:outline-none focus:border-[#E8660A] transition-all duration-200 resize-none"
             />
           </div>
-        </section>
+        </div>
+      </div>
 
-        {/* Payment method */}
-        <section className="bg-surface rounded-card border border-border p-5 space-y-3">
-          <h2 className="font-bold text-text-primary">Forma de pago</h2>
-          <Controller
-            name="paymentMethod"
-            control={control}
-            render={({ field }) => (
-              <PaymentMethodSelector value={field.value} onChange={field.onChange} />
-            )}
-          />
-        </section>
-
-        {/* Delivery method */}
-        <section className="bg-surface rounded-card border border-border p-5 space-y-3">
-          <h2 className="font-bold text-text-primary">Método de entrega</h2>
-          <Controller
-            name="deliveryMethod"
-            control={control}
-            render={({ field }) => (
-              <DeliveryMethodSelector
-                value={field.value}
-                onChange={field.onChange}
-                deliveryFee={deliveryFee}
-              />
-            )}
-          />
-
-          {deliveryMethod === 'envio' && (
-            <div>
-              <Label required>Dirección de entrega</Label>
-              <Input
-                {...register('address')}
-                placeholder="Calle Falsa 123, Mercedes"
-                autoComplete="street-address"
-                error={errors.address}
-              />
-              <FieldError message={errors.address?.message} />
-            </div>
+      <div className="bg-white rounded-2xl border border-stone-100 shadow-sm p-5">
+        <SectionHeader number="2" title="Forma de pago" subtitle="¿Cómo vas a abonar?" />
+        <Controller
+          name="paymentMethod"
+          control={control}
+          render={({ field }) => (
+            <PaymentMethodSelector value={field.value} onChange={field.onChange} />
           )}
-        </section>
+        />
+      </div>
 
-        {/* Schedule */}
-        <section className="bg-surface rounded-card border border-border p-5 space-y-3">
-          <h2 className="font-bold text-text-primary">Horario preferido</h2>
-          <Controller
-            name="schedule"
-            control={control}
-            render={({ field }) => (
-              <ScheduleSelector value={field.value} onChange={field.onChange} />
-            )}
-          />
-        </section>
+      <div className="bg-white rounded-2xl border border-stone-100 shadow-sm p-5">
+        <SectionHeader number="3" title="Método de entrega" subtitle="¿Retirás o te lo llevamos?" />
+        <Controller
+          name="deliveryMethod"
+          control={control}
+          render={({ field }) => (
+            <DeliveryMethodSelector
+              value={field.value}
+              onChange={field.onChange}
+              deliveryFee={deliveryFee}
+            />
+          )}
+        />
+        {deliveryMethod === 'envio' && (
+          <div className="mt-3">
+            <FloatingInput
+              label="Dirección de entrega"
+              error={errors.address}
+              autoComplete="street-address"
+              {...register('address')}
+            />
+            <FieldError message={errors.address?.message} />
+          </div>
+        )}
+      </div>
 
-        {/* Submit */}
-        <Button
+      <div className="bg-white rounded-2xl border border-stone-100 shadow-sm p-5">
+        <SectionHeader number="4" title="Horario preferido" subtitle="¿Cuándo querés recibirlo?" />
+        <Controller
+          name="schedule"
+          control={control}
+          render={({ field }) => (
+            <ScheduleSelector value={field.value} onChange={field.onChange} />
+          )}
+        />
+      </div>
+
+      <div className="pt-2 pb-8">
+        <button
           type="submit"
-          variant="primary"
-          size="lg"
-          loading={sending}
-          className="w-full"
+          disabled={sending}
+          className="w-full flex items-center justify-center gap-3 py-4 px-6 rounded-2xl bg-[#25D366] hover:bg-[#1ebe5d] active:scale-[0.98] text-white font-bold text-base transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-60 disabled:cursor-not-allowed"
         >
-          <MessageCircle className="w-5 h-5" />
-          Enviar pedido por WhatsApp
-        </Button>
-
-        <p className="text-center text-xs text-text-muted pb-6">
-          Al tocar el botón se abrirá WhatsApp con tu pedido listo para enviar.
+          {sending ? (
+            <span className="flex items-center gap-2">
+              <svg className="animate-spin w-5 h-5" viewBox="0 0 24 24" fill="none">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+              </svg>
+              Preparando pedido...
+            </span>
+          ) : (
+            <>
+              <MessageCircle className="w-5 h-5" strokeWidth={2} />
+              Enviar pedido por WhatsApp
+            </>
+          )}
+        </button>
+        <p className="text-center text-xs text-stone-400 mt-3">
+          Se abrirá WhatsApp con tu pedido listo para enviar a Amapola
         </p>
       </div>
+
     </form>
   )
 }
