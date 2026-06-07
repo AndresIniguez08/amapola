@@ -1,6 +1,6 @@
 import { useCart } from '../../hooks/useCart'
 import { formatPrice } from '../../lib/formatters'
-import { ShoppingBag, Tag } from 'lucide-react'
+import { ShoppingBag } from 'lucide-react'
 
 export default function OrderSummary({ deliveryFee = 0 }) {
   const { items, subtotal } = useCart()
@@ -21,35 +21,41 @@ export default function OrderSummary({ deliveryFee = 0 }) {
 
       {/* Items */}
       <div className="px-5 py-3 space-y-3">
-        {items.map(({ product, quantity }) => (
-          <div key={product.id} className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-xl bg-stone-100 flex-shrink-0 overflow-hidden">
-              {product.image_url ? (
-                <img
-                  src={product.image_url}
-                  alt={product.name}
-                  loading="lazy"
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center">
-                  <ShoppingBag className="w-4 h-4 text-stone-300" strokeWidth={1} />
-                </div>
-              )}
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-stone-800 truncate">{product.name}</p>
-              <div className="flex items-center gap-1.5 mt-0.5">
-                <span className="text-xs text-stone-400">x{quantity}</span>
-                <span className="text-stone-200">·</span>
-                <span className="text-xs text-stone-400">{formatPrice(product.price)} c/u</span>
+        {items.map(({ key, product, variant, quantity }) => {
+          const price = variant?.price ?? product.price
+          return (
+            <div key={key} className="flex items-center gap-3">
+              <div className="w-11 h-11 rounded-xl bg-stone-100 flex-shrink-0 overflow-hidden">
+                {(variant?.image_url ?? product.image_url) ? (
+                  <img
+                    src={variant?.image_url ?? product.image_url}
+                    alt={product.name}
+                    loading="lazy"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <ShoppingBag className="w-4 h-4 text-stone-300" strokeWidth={1} />
+                  </div>
+                )}
               </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-stone-800 truncate">{product.name}</p>
+                {variant && (
+                  <p className="text-xs text-[#E8660A] font-medium">{variant.name}</p>
+                )}
+                <div className="flex items-center gap-1.5 mt-0.5">
+                  <span className="text-xs text-stone-400">x{quantity}</span>
+                  <span className="text-stone-200">·</span>
+                  <span className="text-xs text-stone-400">{formatPrice(price)} c/u</span>
+                </div>
+              </div>
+              <span className="text-sm font-bold text-stone-800 flex-shrink-0">
+                {formatPrice(price * quantity)}
+              </span>
             </div>
-            <span className="text-sm font-bold text-stone-800 flex-shrink-0">
-              {formatPrice(product.price * quantity)}
-            </span>
-          </div>
-        ))}
+          )
+        })}
       </div>
 
       {/* Totales */}

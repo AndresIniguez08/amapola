@@ -5,14 +5,22 @@ import Badge from '../ui/Badge'
 import { useCart } from '../../hooks/useCart'
 import { formatPrice } from '../../lib/formatters'
 
-export default function ProductCard({ product }) {
+export default function ProductCard({ product, onOpenModal }) {
   const { addItem, updateQuantity, removeItem, getQuantity } = useCart()
   const [adding, setAdding] = useState(false)
+
+  const hasActiveVariants = (product.variants ?? []).some(v => v.is_active)
+
+  // For no-variant products only; variant products always show quantity 0 on the card
   const quantity = getQuantity(product.id)
 
   async function handleAdd() {
+    if (hasActiveVariants) {
+      onOpenModal?.(product)
+      return
+    }
     setAdding(true)
-    addItem(product)
+    addItem(product, null)
     toast.success(`${product.name} agregado`)
     setTimeout(() => setAdding(false), 300)
   }
@@ -29,14 +37,21 @@ export default function ProductCard({ product }) {
     }
   }
 
+  function handleCardClick() {
+    onOpenModal?.(product)
+  }
+
   return (
     <article
       className={`relative bg-surface rounded-card shadow-card overflow-hidden flex flex-col transition-all duration-200 hover:shadow-card-hover ${
         !product.is_available ? 'opacity-70' : ''
       }`}
     >
-      {/* Image */}
-      <div className="relative aspect-square bg-stone-100 overflow-hidden">
+      {/* Image — clickable to open modal */}
+      <div
+        className={`relative aspect-square bg-stone-100 overflow-hidden ${onOpenModal ? 'cursor-pointer' : ''}`}
+        onClick={handleCardClick}
+      >
         {product.image_url ? (
           <img
             src={product.image_url}
@@ -66,7 +81,10 @@ export default function ProductCard({ product }) {
       {/* Info */}
       <div className="p-4 flex flex-col flex-1 gap-3">
         <div className="flex-1">
-          <h3 className="font-semibold text-text-primary text-sm leading-snug">
+          <h3
+            className={`font-semibold text-text-primary text-sm leading-snug ${onOpenModal ? 'cursor-pointer hover:text-[#E8660A] transition-colors' : ''}`}
+            onClick={handleCardClick}
+          >
             {product.name}
           </h3>
           {product.description && (
@@ -82,7 +100,7 @@ export default function ProductCard({ product }) {
           </span>
 
           {product.is_available && (
-            quantity > 0 ? (
+            !hasActiveVariants && quantity > 0 ? (
               <div className="flex items-center gap-1">
                 <button
                   onClick={handleDecrease}

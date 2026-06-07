@@ -100,7 +100,7 @@ export default function CartDrawer({ open, onClose }) {
           ) : (
             <div className="divide-y divide-border">
               {items.map(item => (
-                <CartItem key={item.product.id} item={item} />
+                <CartItem key={item.key} item={item} />
               ))}
             </div>
           )}

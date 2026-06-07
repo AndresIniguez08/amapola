@@ -1,40 +1,40 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
+const itemKey = (productId, variantId) =>
+  variantId ? `${productId}-${variantId}` : productId
+
 export const useCartStore = create(
   persist(
     (set, get) => ({
-      items: [], // [{product, quantity}]
+      items: [], // [{ key, product, variant, quantity }]
 
-      addItem(product) {
-        const items = get().items
-        const existing = items.find(i => i.product.id === product.id)
-        if (existing) {
-          set({
-            items: items.map(i =>
-              i.product.id === product.id
-                ? { ...i, quantity: i.quantity + 1 }
-                : i,
-            ),
-          })
-        } else {
-          set({ items: [...items, { product, quantity: 1 }] })
-        }
+      addItem(product, variant = null) {
+        const key = itemKey(product.id, variant?.id)
+        set(state => {
+          const existing = state.items.find(i => i.key === key)
+          if (existing) {
+            return {
+              items: state.items.map(i =>
+                i.key === key ? { ...i, quantity: i.quantity + 1 } : i,
+              ),
+            }
+          }
+          return { items: [...state.items, { key, product, variant, quantity: 1 }] }
+        })
       },
 
-      removeItem(productId) {
-        set({ items: get().items.filter(i => i.product.id !== productId) })
+      removeItem(key) {
+        set({ items: get().items.filter(i => i.key !== key) })
       },
 
-      updateQuantity(productId, quantity) {
+      updateQuantity(key, quantity) {
         if (quantity <= 0) {
-          get().removeItem(productId)
+          get().removeItem(key)
           return
         }
         set({
-          items: get().items.map(i =>
-            i.product.id === productId ? { ...i, quantity } : i,
-          ),
+          items: get().items.map(i => i.key === key ? { ...i, quantity } : i),
         })
       },
 
@@ -47,10 +47,10 @@ export const useCartStore = create(
       },
 
       get subtotal() {
-        return get().items.reduce(
-          (sum, i) => sum + i.product.price * i.quantity,
-          0,
-        )
+        return get().items.reduce((sum, item) => {
+          const price = item.variant?.price ?? item.product.price
+          return sum + price * item.quantity
+        }, 0)
       },
     }),
     {

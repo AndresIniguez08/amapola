@@ -4,15 +4,16 @@ import { formatPrice } from '../../lib/formatters'
 
 export default function CartItem({ item }) {
   const { updateQuantity, removeItem } = useCart()
-  const { product, quantity } = item
+  const { key, product, variant, quantity } = item
+  const price = variant?.price ?? product.price
 
   return (
     <div className="flex gap-3 py-3">
       {/* Thumbnail */}
       <div className="w-16 h-16 rounded-lg bg-stone-100 flex-shrink-0 overflow-hidden">
-        {product.image_url ? (
+        {(variant?.image_url ?? product.image_url) ? (
           <img
-            src={product.image_url}
+            src={variant?.image_url ?? product.image_url}
             alt={product.name}
             loading="lazy"
             className="w-full h-full object-cover"
@@ -27,11 +28,16 @@ export default function CartItem({ item }) {
       {/* Info */}
       <div className="flex-1 min-w-0">
         <div className="flex items-start justify-between gap-2">
-          <p className="text-sm font-semibold text-text-primary leading-snug truncate">
-            {product.name}
-          </p>
+          <div className="min-w-0">
+            <p className="text-sm font-semibold text-text-primary leading-snug truncate">
+              {product.name}
+            </p>
+            {variant && (
+              <p className="text-xs text-[#E8660A] font-medium">{variant.name}</p>
+            )}
+          </div>
           <button
-            onClick={() => removeItem(product.id)}
+            onClick={() => removeItem(key)}
             className="flex-shrink-0 p-1 rounded text-text-muted hover:text-error transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-error"
             aria-label={`Eliminar ${product.name}`}
           >
@@ -40,13 +46,13 @@ export default function CartItem({ item }) {
         </div>
 
         <p className="text-xs text-text-muted mt-0.5">
-          {formatPrice(product.price)} c/u
+          {formatPrice(price)} c/u
         </p>
 
         <div className="flex items-center justify-between mt-2">
           <div className="flex items-center gap-1.5">
             <button
-              onClick={() => updateQuantity(product.id, quantity - 1)}
+              onClick={() => updateQuantity(key, quantity - 1)}
               className="w-7 h-7 rounded-full border border-border flex items-center justify-center hover:bg-stone-50 transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-primary"
               aria-label="Reducir"
             >
@@ -56,7 +62,7 @@ export default function CartItem({ item }) {
               {quantity}
             </span>
             <button
-              onClick={() => updateQuantity(product.id, quantity + 1)}
+              onClick={() => updateQuantity(key, quantity + 1)}
               className="w-7 h-7 rounded-full bg-primary text-white flex items-center justify-center hover:bg-primary-dark transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-primary"
               aria-label="Aumentar"
             >
@@ -65,7 +71,7 @@ export default function CartItem({ item }) {
           </div>
 
           <span className="text-sm font-bold text-text-primary">
-            {formatPrice(product.price * quantity)}
+            {formatPrice(price * quantity)}
           </span>
         </div>
       </div>

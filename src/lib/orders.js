@@ -5,22 +5,27 @@ export async function saveOrder(items, formData, storeConfig) {
     ? Number(storeConfig.delivery_fee ?? 0)
     : 0
 
-  const subtotal = items.reduce(
-    (sum, { product, quantity }) => sum + product.price * quantity,
-    0
-  )
+  const subtotal = items.reduce((sum, { product, variant, quantity }) => {
+    const price = variant?.price ?? product.price
+    return sum + price * quantity
+  }, 0)
 
   const payload = {
     customer_name:    formData.name,
     customer_phone:   formData.phone,
     customer_address: formData.address ?? null,
-    items: items.map(({ product, quantity }) => ({
-      id:       product.id,
-      name:     product.name,
-      price:    product.price,
-      quantity,
-      subtotal: product.price * quantity,
-    })),
+    items: items.map(({ product, variant, quantity }) => {
+      const price = variant?.price ?? product.price
+      return {
+        id:           product.id,
+        name:         product.name,
+        variant_id:   variant?.id ?? null,
+        variant_name: variant?.name ?? null,
+        price,
+        quantity,
+        subtotal: price * quantity,
+      }
+    }),
     subtotal,
     delivery_fee: deliveryFee,
     total:        subtotal + deliveryFee,

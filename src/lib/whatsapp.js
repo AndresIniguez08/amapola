@@ -13,9 +13,16 @@ const memo   = String.fromCodePoint(0x1F4DD)
 
 export function generateWhatsAppMessage(items, formData, storeConfig) {
   const deliveryFee = formData.deliveryMethod === 'envio' ? Number(storeConfig.delivery_fee ?? 0) : 0
-  const subtotal = items.reduce((sum, { product, quantity }) => sum + product.price * quantity, 0)
+  const subtotal = items.reduce((sum, { product, variant, quantity }) => {
+    const price = variant?.price ?? product.price
+    return sum + price * quantity
+  }, 0)
   const total = subtotal + deliveryFee
-  const productLines = items.map(({ product, quantity }) => '- ' + quantity + 'x ' + product.name + ' - ' + formatPrice(product.price * quantity)).join('\n')
+  const productLines = items.map(({ product, variant, quantity }) => {
+    const price = variant?.price ?? product.price
+    const variantLabel = variant ? ` (${variant.name})` : ''
+    return '- ' + quantity + 'x ' + product.name + variantLabel + ' - ' + formatPrice(price * quantity)
+  }).join('\n')
   const deliveryLabel = formData.deliveryMethod === 'envio' ? 'Envio a domicilio' : 'Retiro en local'
   const scheduleMap = { manana: 'Manana (8-12)', mediodia: 'Mediodia (12-15)', tarde: 'Tarde (15-19)' }
   const paymentMap = { efectivo: 'Efectivo', transferencia: 'Transferencia bancaria', mercadopago: 'Mercado Pago' }

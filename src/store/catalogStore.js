@@ -15,7 +15,7 @@ export const useCatalogStore = create((set, get) => ({
     try {
       const { data, error } = await supabase
         .from('products')
-        .select('*')
+        .select('*, variants(*)')
         .eq('is_available', true)
         .order('is_featured', { ascending: false })
         .order('name')
