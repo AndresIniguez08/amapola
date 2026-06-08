@@ -45,10 +45,10 @@ export default function ProductForm({ product, onSuccess, onCancel, categories =
   // --- Variants state ---
   const [variants, setVariants] = useState([])
   const [variantsLoading, setVariantsLoading] = useState(false)
-  const [newVariant, setNewVariant] = useState({ name: '', price: '', image_url: '' })
+  const [newVariant, setNewVariant] = useState({ name: '', price: '', cost: '', image_url: '' })
   const [addingVariant, setAddingVariant] = useState(false)
   const [editingVariantId, setEditingVariantId] = useState(null)
-  const [editVariant, setEditVariant] = useState({ name: '', price: '', image_url: '' })
+  const [editVariant, setEditVariant] = useState({ name: '', price: '', cost: '', image_url: '' })
 
   useEffect(() => {
     if (!isEdit) return
@@ -82,6 +82,7 @@ export default function ProductForm({ product, onSuccess, onCancel, categories =
           product_id: product.id,
           name: newVariant.name.trim(),
           price: newVariant.price ? Number(newVariant.price) : null,
+          cost: newVariant.cost ? Number(newVariant.cost) : 0,
           image_url: newVariant.image_url || null,
           position: variants.length,
           is_active: true,
@@ -90,7 +91,7 @@ export default function ProductForm({ product, onSuccess, onCancel, categories =
         .single()
       if (error) throw error
       setVariants(v => [...v, data])
-      setNewVariant({ name: '', price: '', image_url: '' })
+      setNewVariant({ name: '', price: '', cost: '', image_url: '' })
       toast.success('Variante agregada')
     } catch (err) {
       toast.error(err.message)
@@ -131,6 +132,7 @@ export default function ProductForm({ product, onSuccess, onCancel, categories =
     setEditVariant({
       name: variant.name,
       price: variant.price !== null ? String(variant.price) : '',
+      cost: variant.cost !== null ? String(variant.cost) : '0',
       image_url: variant.image_url ?? '',
     })
   }
@@ -141,6 +143,7 @@ export default function ProductForm({ product, onSuccess, onCancel, categories =
       const updates = {
         name: editVariant.name.trim(),
         price: editVariant.price ? Number(editVariant.price) : null,
+        cost: editVariant.cost ? Number(editVariant.cost) : 0,
         image_url: editVariant.image_url || null,
       }
       const { error } = await supabase
@@ -365,7 +368,7 @@ export default function ProductForm({ product, onSuccess, onCancel, categories =
                 {editingVariantId === variant.id ? (
                   /* Inline edit form */
                   <div className="bg-stone-50 rounded-xl border border-stone-200 p-3 space-y-3">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                       <div>
                         <label className="block text-xs font-semibold text-text-primary mb-1">
                           Nombre <span className="text-error">*</span>
@@ -384,6 +387,17 @@ export default function ProductForm({ product, onSuccess, onCancel, categories =
                           type="number"
                           step="0.01"
                           placeholder="Igual que el producto"
+                          className="w-full px-3 py-2 text-sm border border-border rounded-btn focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-text-primary mb-1">Costo</label>
+                        <input
+                          value={editVariant.cost}
+                          onChange={e => setEditVariant(f => ({ ...f, cost: e.target.value }))}
+                          type="number"
+                          step="0.01"
+                          placeholder="0"
                           className="w-full px-3 py-2 text-sm border border-border rounded-btn focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                         />
                       </div>
@@ -440,6 +454,9 @@ export default function ProductForm({ product, onSuccess, onCancel, categories =
                           : <span className="text-stone-400">Precio base</span>
                         }
                       </p>
+                      <p className="text-xs text-stone-400">
+                        Costo: {variant.cost > 0 ? `$${variant.cost}` : <span className="text-stone-300">—</span>}
+                      </p>
                     </div>
                     <div className="flex items-center gap-2 flex-shrink-0">
                       <Toggle
@@ -472,7 +489,7 @@ export default function ProductForm({ product, onSuccess, onCancel, categories =
             {/* Add new variant form */}
             <div className="bg-stone-50 rounded-xl border border-dashed border-stone-300 p-3 space-y-3">
               <p className="text-xs font-semibold text-text-muted">Agregar variante</p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
                   <label className="block text-xs font-semibold text-text-primary mb-1">
                     Nombre <span className="text-error">*</span>
@@ -492,6 +509,17 @@ export default function ProductForm({ product, onSuccess, onCancel, categories =
                     type="number"
                     step="0.01"
                     placeholder="Igual que el producto"
+                    className="w-full px-3 py-2 text-sm border border-border rounded-btn focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-text-primary mb-1">Costo</label>
+                  <input
+                    value={newVariant.cost}
+                    onChange={e => setNewVariant(f => ({ ...f, cost: e.target.value }))}
+                    type="number"
+                    step="0.01"
+                    placeholder="0"
                     className="w-full px-3 py-2 text-sm border border-border rounded-btn focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                   />
                 </div>

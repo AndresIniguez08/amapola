@@ -128,9 +128,13 @@ export default function AdminDashboardPage() {
     let totalCostos = 0;
     filtered.forEach((o) => {
       (o.items ?? []).forEach((item) => {
-        const prod = productMap[item.id];
-        if (prod && prod.cost > 0) {
-          totalCostos += prod.cost * item.quantity;
+        if (item.cost && item.cost > 0) {
+          totalCostos += item.cost * item.quantity;
+        } else {
+          const prod = productMap[item.id];
+          if (prod && prod.cost > 0) {
+            totalCostos += prod.cost * item.quantity;
+          }
         }
       });
     });
@@ -155,15 +159,13 @@ export default function AdminDashboardPage() {
     const map = {};
     filtered.forEach((o) => {
       (o.items ?? []).forEach((item) => {
-        if (!map[item.name])
-          map[item.name] = { name: item.name, qty: 0, revenue: 0 };
-        map[item.name].qty += item.quantity;
-        map[item.name].revenue += item.subtotal;
+        const key = item.variant_name ? `${item.name} — ${item.variant_name}` : item.name;
+        if (!map[key]) map[key] = { name: key, qty: 0, revenue: 0 };
+        map[key].qty += item.quantity;
+        map[key].revenue += item.subtotal;
       });
     });
-    return Object.values(map)
-      .sort((a, b) => b.qty - a.qty)
-      .slice(0, 5);
+    return Object.values(map).sort((a, b) => b.qty - a.qty).slice(0, 5);
   }, [filtered]);
 
   const profitability = useMemo(() => {
@@ -174,19 +176,20 @@ export default function AdminDashboardPage() {
     const map = {};
     filtered.forEach((o) => {
       (o.items ?? []).forEach((item) => {
-        const prod = productMap[item.id];
-        if (!prod || !prod.cost || prod.cost <= 0) return;
-        if (!map[item.name]) {
-          map[item.name] = {
-            name: item.name,
+        const effectiveCost = item.cost > 0 ? item.cost : (productMap[item.id]?.cost ?? 0);
+        if (!effectiveCost || effectiveCost <= 0) return;
+        const key = item.variant_name ? `${item.name} — ${item.variant_name}` : item.name;
+        if (!map[key]) {
+          map[key] = {
+            name: key,
             price: item.price,
-            cost: prod.cost,
+            cost: effectiveCost,
             qty: 0,
             revenue: 0,
           };
         }
-        map[item.name].qty += item.quantity;
-        map[item.name].revenue += item.subtotal;
+        map[key].qty += item.quantity;
+        map[key].revenue += item.subtotal;
       });
     });
     return Object.values(map)

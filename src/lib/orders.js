@@ -16,14 +16,17 @@ export async function saveOrder(items, formData, storeConfig) {
     customer_address: formData.address ?? null,
     items: items.map(({ product, variant, quantity }) => {
       const price = variant?.price ?? product.price
+      const cost = variant?.cost ?? product.cost ?? 0
       return {
         id:           product.id,
         name:         product.name,
         variant_id:   variant?.id ?? null,
         variant_name: variant?.name ?? null,
         price,
+        cost,
         quantity,
-        subtotal: price * quantity,
+        subtotal:     price * quantity,
+        cost_total:   cost * quantity,
       }
     }),
     subtotal,
