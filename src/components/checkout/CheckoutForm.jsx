@@ -135,7 +135,10 @@ export default function CheckoutForm() {
 
       // Guardar pedido en background sin bloquear la UX
       saveOrder(items, data, storeConfig).catch((err) => {
-        console.error("Error guardando pedido:", err);
+        console.error("Error guardando pedido:", err.message, err);
+        toast.error(
+          "Pedido enviado, pero no se pudo registrar: " + err.message,
+        );
       });
 
       clearCart();
