@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { Package, Settings, LogOut, LayoutDashboard, ClipboardList, Tag } from 'lucide-react'
+import { Package, Settings, LogOut, LayoutDashboard, ClipboardList, Tag, Megaphone } from 'lucide-react'
 import Logo from '../../components/ui/Logo'
 import { useAuthStore } from '../../store/authStore'
 
@@ -8,6 +8,7 @@ const NAV = [
   { to: '/admin/pedidos', label: 'Pedidos', icon: ClipboardList },
   { to: '/admin/productos', label: 'Productos', icon: Package },
   { to: '/admin/categorias', label: 'Categorías', icon: Tag },
+  { to: '/admin/publicidad', label: 'Publicidad', icon: Megaphone },
   { to: '/admin/configuracion', label: 'Configuración', icon: Settings },
 ]
 
@@ -27,7 +28,7 @@ export default function AdminLayout({ children }) {
       <aside className="hidden md:flex flex-col w-56 bg-surface border-r border-border p-4 gap-1 shrink-0">
         <div className="flex items-center gap-2 text-primary font-bold text-base px-3 py-2 mb-4">
           <Logo size={150} />
-          
+            
         </div>
         {NAV.map(({ to, label, icon: Icon }) => (
           <Link
