@@ -412,6 +412,7 @@ export default function FlierPreview({
               padding: "8px 28px",
               zIndex: 1,
               boxShadow: "0 2px 12px rgba(61,42,107,0.12)",
+              flexShrink: 0,
             }}
           >
             <p
@@ -464,7 +465,7 @@ export default function FlierPreview({
                   <div
                     style={{
                       width: "100%",
-                      height: itemCount <= 2 ? 200 : 140,
+                      height: itemCount <= 2 ? 200 : 110,
                       flexShrink: 0,
                       overflow: "hidden",
                     }}
@@ -497,11 +498,11 @@ export default function FlierPreview({
                   </div>
                   <div
                     style={{
-                      padding: "10px 12px",
+                      padding: itemCount <= 2 ? "10px 12px" : "6px 8px",
                       display: "flex",
                       flexDirection: "column",
                       alignItems: "center",
-                      gap: 5,
+                      gap: itemCount <= 2 ? 5 : 3,
                       flex: 1,
                       justifyContent: "center",
                     }}
@@ -525,7 +526,7 @@ export default function FlierPreview({
                       style={{
                         color: "#2D1F4E",
                         fontWeight: 800,
-                        fontSize: itemCount <= 2 ? 15 : 12,
+                        fontSize: itemCount <= 2 ? 15 : 11,
                         margin: 0,
                         textAlign: "center",
                         lineHeight: 1.2,
@@ -543,8 +544,8 @@ export default function FlierPreview({
                           background: "#7C5CBF",
                           color: "white",
                           fontWeight: 800,
-                          fontSize: itemCount <= 2 ? 15 : 12,
-                          padding: "5px 14px",
+                          fontSize: itemCount <= 2 ? 15 : 11,
+                          padding: itemCount <= 2 ? "5px 14px" : "3px 10px",
                           borderRadius: 50,
                           whiteSpace: "nowrap",
                           boxShadow: "0 2px 8px rgba(61,42,107,0.25)",
@@ -566,6 +567,7 @@ export default function FlierPreview({
               margin: 0,
               zIndex: 1,
               letterSpacing: 0.5,
+              flexShrink: 0,
             }}
           >
             amapola.pulsowebstudio.com.ar
