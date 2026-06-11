@@ -11,7 +11,7 @@ import { urlToBase64 } from '../../lib/imageUtils'
 
 function ComboSelector({ products, comboItems, onChange }) {
   async function updateItem(index, field, value) {
-    const updated = [...comboItems]
+    const updated = comboItems.map((item, i) => ({ ...item }))
 
     if (field === 'product') {
       const found = products.find(p => p.id === value)
@@ -34,18 +34,109 @@ function ComboSelector({ products, comboItems, onChange }) {
         variants,
       }
     } else if (field === 'variant') {
-      const found = updated[index].variants.find(v => v.id === value)
+      const found = updated[index].variants?.find(v => v.id === value) ?? null
       updated[index] = {
         ...updated[index],
-        variant: found ?? null,
-        price: found?.price ? String(found.price) : String(updated[index].product?.price ?? ''),
+        variant: found,
+        price: found?.price
+          ? String(found.price)
+          : String(updated[index].product?.price ?? ''),
       }
     } else {
       updated[index] = { ...updated[index], [field]: value }
     }
 
-    onChange(updated)
+    onChange([...updated])
   }
+
+  function addItem() {
+    if (comboItems.length >= 4) return
+    onChange([...comboItems, { product: null, label: '', price: '', variant: null, variants: [] }])
+  }
+
+  function removeItem(index) {
+    if (comboItems.length <= 2) return
+    onChange(comboItems.filter((_, i) => i !== index))
+  }
+
+  return (
+    <div className="flex flex-col gap-3">
+      <label className="text-sm font-medium text-text-primary">
+        Productos del combo (máx. 4)
+      </label>
+      {comboItems.map((item, index) => (
+        <div key={index} className="flex flex-col gap-1.5 p-3 bg-stone-50 rounded-xl border border-stone-200">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-stone-500">
+              Producto {index + 1}
+            </span>
+            {comboItems.length > 2 && (
+              <button
+                onClick={() => removeItem(index)}
+                className="text-xs text-red-400 hover:text-red-600"
+              >
+                Quitar
+              </button>
+            )}
+          </div>
+
+          {/* Selector de producto */}
+          <select
+            className="w-full border border-border rounded-btn px-3 py-2 text-xs bg-surface text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
+            value={item.product?.id ?? ''}
+            onChange={e => updateItem(index, 'product', e.target.value)}
+          >
+            <option value="">— Seleccioná —</option>
+            {products.map(p => (
+              <option key={p.id} value={p.id}>{p.name}</option>
+            ))}
+          </select>
+
+          {/* Selector de variante — solo aparece si el producto tiene variantes */}
+          {item.product && (item.variants ?? []).length > 0 && (
+            <select
+              className="w-full border border-[#7C5CBF] rounded-btn px-3 py-1.5 text-xs bg-[#F3EEFF] text-[#7C5CBF] font-medium focus:outline-none focus:ring-2 focus:ring-primary/30"
+              value={item.variant?.id ?? ''}
+              onChange={e => updateItem(index, 'variant', e.target.value)}
+            >
+              <option value="">— Sin variante —</option>
+              {item.variants.map(v => (
+                <option key={v.id} value={v.id}>
+                  {v.name}{v.price ? ` — $${Number(v.price).toLocaleString('es-AR')}` : ''}
+                </option>
+              ))}
+            </select>
+          )}
+
+          {/* Etiqueta y precio */}
+          <div className="grid grid-cols-2 gap-2">
+            <input
+              className="border border-border rounded-btn px-3 py-1.5 text-xs bg-surface text-text-primary focus:outline-none"
+              placeholder="Etiqueta (ej: x6 unid)"
+              value={item.label}
+              onChange={e => updateItem(index, 'label', e.target.value)}
+            />
+            <input
+              className="border border-border rounded-btn px-3 py-1.5 text-xs bg-surface text-text-primary focus:outline-none"
+              placeholder="Precio (ej: 8000)"
+              type="number"
+              value={item.price}
+              onChange={e => updateItem(index, 'price', e.target.value)}
+            />
+          </div>
+        </div>
+      ))}
+      {comboItems.length < 4 && (
+        <button
+          onClick={addItem}
+          className="text-xs text-[#7C5CBF] font-semibold hover:underline text-left"
+        >
+          + Agregar producto
+        </button>
+      )}
+    </div>
+  )
+}
 
   function addItem() {
     if (comboItems.length >= 4) return
