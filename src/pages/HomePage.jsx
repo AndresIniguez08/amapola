@@ -1,18 +1,19 @@
-import { useEffect } from 'react'
-import { ArrowRight, Leaf, Heart, Package } from 'lucide-react'
-import { useProducts } from '../hooks/useProducts'
-import ProductGrid from '../components/catalog/ProductGrid'
-import CategoryFilter from '../components/catalog/CategoryFilter'
-import SearchBar from '../components/catalog/SearchBar'
-import Button from '../components/ui/Button'
+import { useEffect } from "react";
+import { ArrowRight, Leaf, Heart, Package } from "lucide-react";
+import { useProducts } from "../hooks/useProducts";
+import ProductGrid from "../components/catalog/ProductGrid";
+import CategoryFilter from "../components/catalog/CategoryFilter";
+import SearchBar from "../components/catalog/SearchBar";
+import Button from "../components/ui/Button";
 
 const FEATURES = [
-  { icon: Leaf, title: 'Artesanal', desc: 'Hecho a mano cada mañana' },
-  { icon: Heart, title: 'Con amor', desc: 'Ingredientes naturales' },
-  { icon: Package, title: 'A domicilio', desc: 'Mercedes y alrededores' },
-]
+  { icon: Leaf, title: "Artesanal", desc: "Hecho a mano cada mañana" },
+  { icon: Heart, title: "Con amor", desc: "Ingredientes naturales" },
+  { icon: Package, title: "A domicilio", desc: "Mercedes y alrededores" },
+];
 
-const HERO_IMAGE = 'https://images.unsplash.com/photo-1556471013-0001958d2702?w=1400&q=80&auto=format&fit=crop'
+const HERO_IMAGE =
+  "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=1172&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
 
 export default function HomePage() {
   const {
@@ -25,17 +26,20 @@ export default function HomePage() {
     fetchProducts,
     categories,
     fetchCategories,
-  } = useProducts()
+  } = useProducts();
 
   useEffect(() => {
-    fetchProducts()
-    fetchCategories()
-  }, []) // eslint-disable-line
+    fetchProducts();
+    fetchCategories();
+  }, []); // eslint-disable-line
 
   return (
     <>
       {/* Hero con imagen real */}
-      <section className="relative overflow-hidden" style={{ minHeight: '480px' }}>
+      <section
+        className="relative overflow-hidden"
+        style={{ minHeight: "480px" }}
+      >
         {/* Imagen de fondo */}
         <img
           src={HERO_IMAGE}
@@ -47,7 +51,8 @@ export default function HomePage() {
         <div
           className="absolute inset-0"
           style={{
-            background: 'linear-gradient(to bottom, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.65) 100%)',
+            background:
+              "linear-gradient(to bottom, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.65) 100%)",
           }}
         />
 
@@ -58,30 +63,43 @@ export default function HomePage() {
           </span>
 
           <h1 className="text-4xl md:text-6xl font-extrabold text-white leading-tight max-w-2xl drop-shadow-sm">
-            El pan que merece<br className="hidden sm:block" /> tu mesa
+            El pan que merece
+            <br className="hidden sm:block" /> tu mesa
           </h1>
 
           <p className="text-white/80 text-base md:text-lg max-w-md leading-relaxed">
-            Panes integrales, fajitas, talitas, mini tartas y mas...<br />
+            Panes integrales, fajitas, talitas, mini tartas y mas...
+            <br />
             Pedí online y recibí en tu puerta.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 mt-2">
             <button
-              onClick={() => document.getElementById('catalogo')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() =>
+                document
+                  .getElementById("catalogo")
+                  ?.scrollIntoView({ behavior: "smooth" })
+              }
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#7C5CBF] hover:bg-[#5E3FA3] text-white font-semibold text-sm transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
             >
               Ver productos
               <ArrowRight className="w-4 h-4" />
             </button>
-            
           </div>
         </div>
 
         {/* Wave decorativa abajo */}
         <div className="absolute bottom-0 left-0 right-0">
-          <svg viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full">
-            <path d="M0 60L1440 60L1440 20C1200 60 960 0 720 20C480 40 240 0 0 20L0 60Z" fill="#FAF8F5"/>
+          <svg
+            viewBox="0 0 1440 60"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-full"
+          >
+            <path
+              d="M0 60L1440 60L1440 20C1200 60 960 0 720 20C480 40 240 0 0 20L0 60Z"
+              fill="#FAF8F5"
+            />
           </svg>
         </div>
       </section>
@@ -98,8 +116,12 @@ export default function HomePage() {
                 <Icon className="w-5 h-5 text-[#7C5CBF]" strokeWidth={1.8} />
               </div>
               <div>
-                <p className="font-semibold text-stone-800 text-xs sm:text-sm">{title}</p>
-                <p className="text-stone-400 text-xs hidden sm:block mt-0.5">{desc}</p>
+                <p className="font-semibold text-stone-800 text-xs sm:text-sm">
+                  {title}
+                </p>
+                <p className="text-stone-400 text-xs hidden sm:block mt-0.5">
+                  {desc}
+                </p>
               </div>
             </div>
           ))}
@@ -110,7 +132,9 @@ export default function HomePage() {
       <section id="catalogo" className="max-w-6xl mx-auto px-4 pt-2 pb-4">
         <div className="flex items-center gap-4 mb-6">
           <div className="h-px flex-1 bg-stone-100" />
-          <span className="text-xs font-semibold text-stone-400 uppercase tracking-widest">Nuestros productos</span>
+          <span className="text-xs font-semibold text-stone-400 uppercase tracking-widest">
+            Nuestros productos
+          </span>
           <div className="h-px flex-1 bg-stone-100" />
         </div>
 
@@ -120,7 +144,11 @@ export default function HomePage() {
           </div>
         </div>
 
-        <CategoryFilter active={activeCategory} onChange={setCategory} categories={categories} />
+        <CategoryFilter
+          active={activeCategory}
+          onChange={setCategory}
+          categories={categories}
+        />
       </section>
 
       {/* Grid de productos */}
@@ -132,5 +160,5 @@ export default function HomePage() {
         />
       </section>
     </>
-  )
+  );
 }
