@@ -10,13 +10,14 @@ export default function FlierPreview({
   templateType = "producto",
   comboItems = [],
   resolvedImages = {},
+  selectedVariant,
+  onVariantChange,
 }) {
   const isInstagram = format === "instagram";
   const [variants, setVariants] = useState([]);
-  const [selectedVariant, setSelectedVariant] = useState(null);
 
   useEffect(() => {
-    setSelectedVariant(null);
+    onVariantChange?.(null);
     setVariants([]);
     if (!product?.id) return;
     supabase
@@ -41,7 +42,6 @@ export default function FlierPreview({
   const mainImageSrc = resolvedImages["main"] ?? displayImage;
   const bgSrc = resolvedImages["background"];
 
-  // Dimensiones base altas para mejor calidad al descargar
   const INST_W = 800;
   const INST_H = 800;
   const WA_W = 800;
@@ -93,7 +93,7 @@ export default function FlierPreview({
           </p>
           <div className="flex flex-wrap gap-2">
             <button
-              onClick={() => setSelectedVariant(null)}
+              onClick={() => onVariantChange?.(null)}
               className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${
                 !selectedVariant
                   ? "bg-[#7C5CBF] text-white border-[#7C5CBF]"
@@ -105,7 +105,7 @@ export default function FlierPreview({
             {variants.map((v) => (
               <button
                 key={v.id}
-                onClick={() => setSelectedVariant(v)}
+                onClick={() => onVariantChange?.(v)}
                 className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${
                   selectedVariant?.id === v.id
                     ? "bg-[#7C5CBF] text-white border-[#7C5CBF]"

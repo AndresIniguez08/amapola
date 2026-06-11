@@ -12,7 +12,6 @@ import { urlToBase64 } from "../../lib/imageUtils";
 function ComboSelector({ products, comboItems, onChange }) {
   async function updateItem(index, field, value) {
     const updated = comboItems.map((item) => ({ ...item }));
-
     if (field === "product") {
       const found = products.find((p) => p.id === value);
       let variants = [];
@@ -46,7 +45,6 @@ function ComboSelector({ products, comboItems, onChange }) {
     } else {
       updated[index] = { ...updated[index], [field]: value };
     }
-
     onChange([...updated]);
   }
 
@@ -86,7 +84,6 @@ function ComboSelector({ products, comboItems, onChange }) {
               </button>
             )}
           </div>
-
           <select
             className="w-full border border-border rounded-btn px-3 py-2 text-xs bg-surface text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
             value={item.product?.id ?? ""}
@@ -99,7 +96,6 @@ function ComboSelector({ products, comboItems, onChange }) {
               </option>
             ))}
           </select>
-
           {item.product && (item.variants ?? []).length > 0 && (
             <select
               className="w-full border border-[#7C5CBF] rounded-btn px-3 py-1.5 text-xs bg-[#F3EEFF] text-[#7C5CBF] font-medium focus:outline-none focus:ring-2 focus:ring-primary/30"
@@ -117,7 +113,6 @@ function ComboSelector({ products, comboItems, onChange }) {
               ))}
             </select>
           )}
-
           <div className="grid grid-cols-2 gap-2">
             <input
               className="border border-border rounded-btn px-3 py-1.5 text-xs bg-surface text-text-primary focus:outline-none"
@@ -151,6 +146,7 @@ export default function AdminAdsPage() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedVariant, setSelectedVariant] = useState(null);
   const [adText, setAdText] = useState("");
   const [format, setFormat] = useState("instagram");
   const [templateType, setTemplateType] = useState("producto");
@@ -188,9 +184,14 @@ export default function AdminAdsPage() {
         : "/fondo_publicidad.png";
     urls["background"] = await urlToBase64(bgFile);
 
-    if (templateType === "producto" && selectedProduct?.image_url) {
-      urls["main"] = await urlToBase64(selectedProduct.image_url);
+    if (templateType === "producto") {
+      const mainImage =
+        selectedVariant?.image_url ?? selectedProduct?.image_url;
+      if (mainImage) {
+        urls["main"] = await urlToBase64(mainImage);
+      }
     }
+
     if (templateType === "combo") {
       const filled = comboItems.filter((i) => i.product);
       for (let i = 0; i < filled.length; i++) {
@@ -217,8 +218,6 @@ export default function AdminAdsPage() {
     try {
       const resolved = await resolveImages();
       setResolvedImages(resolved);
-
-      // Esperar más tiempo para que React renderice con las imágenes base64
       await new Promise((resolve) => setTimeout(resolve, 600));
 
       const element = flierRef.current;
@@ -240,7 +239,6 @@ export default function AdminAdsPage() {
           : `amapola-${selectedProduct.name.toLowerCase().replace(/\s+/g, "-")}-${format}.png`;
       link.href = canvas.toDataURL("image/png", 1.0);
       link.click();
-
       setResolvedImages({});
     } catch (err) {
       console.error(err);
@@ -256,7 +254,6 @@ export default function AdminAdsPage() {
         <h1 className="text-2xl font-bold text-text-primary mb-6">
           Publicidad
         </h1>
-
         <div className="flex flex-col lg:flex-row gap-8">
           <div className="flex flex-col gap-5 w-full lg:w-72 shrink-0">
             <div className="flex flex-col gap-1.5">
@@ -301,6 +298,7 @@ export default function AdminAdsPage() {
                         (p) => p.id === e.target.value,
                       );
                       setSelectedProduct(found ?? null);
+                      setSelectedVariant(null);
                     }}
                   >
                     <option value="">— Seleccioná un producto —</option>
@@ -395,6 +393,8 @@ export default function AdminAdsPage() {
                 templateType={templateType}
                 comboItems={comboItems}
                 resolvedImages={resolvedImages}
+                selectedVariant={selectedVariant}
+                onVariantChange={setSelectedVariant}
               />
             </div>
           </div>
