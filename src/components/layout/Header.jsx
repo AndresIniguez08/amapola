@@ -32,10 +32,9 @@ export default function Header() {
           {/* Logo */}
           <Link
             to="/"
-            className="flex items-center gap-2 text-primary font-bold text-xl hover:opacity-80 transition-opacity"
+            className="flex items-center hover:opacity-80 transition-opacity"
           >
-            <Logo size={28} />
-            <span>Amapola</span>
+            <Logo size={135} />
           </Link>
 
           {/* Cart button */}

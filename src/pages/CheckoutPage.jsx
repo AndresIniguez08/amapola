@@ -6,9 +6,9 @@ import CheckoutForm from "../components/checkout/CheckoutForm";
 import { useCatalogStore } from "../store/catalogStore";
 
 const CHECKOUT_IMAGE =
-  "https://images.unsplash.com/photo-1549931319-a545dcf3bc7c?w=1400&q=80&auto=format&fit=crop";
+  "https://images.unsplash.com/photo-1726241966213-3eb9a93722f9?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
 const EMPTY_IMAGE =
-  "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=1400&q=80&auto=format&fit=crop";
+  "https://images.unsplash.com/photo-1664309688303-ec6625cf4296?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
 
 export default function CheckoutPage() {
   const { items } = useCart();
