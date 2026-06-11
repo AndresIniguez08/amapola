@@ -156,11 +156,15 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
             flexShrink: 0,
           }}>
             {displayImage ? (
-              <img
-                src={displayImage}
-                alt={displayName}
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                crossOrigin="anonymous"
+              <div
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  backgroundImage: `url(${displayImage})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  backgroundRepeat: 'no-repeat',
+                }}
               />
             ) : (
               <div style={{
@@ -270,11 +274,15 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
             {/* Imagen */}
             <div style={{ width: 200, height: '100%', overflow: 'hidden', flexShrink: 0 }}>
               {displayImage ? (
-                <img
-                  src={displayImage}
-                  alt={displayName}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                  crossOrigin="anonymous"
+                <div
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    backgroundImage: `url(${displayImage})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat',
+                  }}
                 />
               ) : (
                 <div style={{
@@ -424,11 +432,15 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
                 {/* Imagen */}
                 <div style={{ width: '100%', height: 120, overflow: 'hidden', flexShrink: 0 }}>
                   {item.product.image_url ? (
-                    <img
-                      src={item.product.image_url}
-                      alt={item.product.name}
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                      crossOrigin="anonymous"
+                    <div
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        backgroundImage: `url(${item.product.image_url})`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        backgroundRepeat: 'no-repeat',
+                      }}
                     />
                   ) : (
                     <div style={{
@@ -559,11 +571,15 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
                 {/* Imagen */}
                 <div style={{ width: '100%', flex: 1, overflow: 'hidden', minHeight: 0 }}>
                   {item.product.image_url ? (
-                    <img
-                      src={item.product.image_url}
-                      alt={item.product.name}
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                      crossOrigin="anonymous"
+                    <div
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        backgroundImage: `url(${item.product.image_url})`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        backgroundRepeat: 'no-repeat',
+                      }}
                     />
                   ) : (
                     <div style={{

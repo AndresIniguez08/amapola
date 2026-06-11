@@ -131,9 +131,10 @@ export default function AdminAdsPage() {
       const canvas = await html2canvas(element, {
         scale: 2,
         useCORS: true,
-        allowTaint: true,
+        allowTaint: false,
         backgroundColor: null,
         logging: false,
+        imageTimeout: 0,
         width: element.offsetWidth,
         height: element.offsetHeight,
         windowWidth: element.offsetWidth,
