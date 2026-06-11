@@ -1,18 +1,17 @@
-import { MapPin, Phone } from 'lucide-react'
-import Logo from '../ui/Logo'
-import { useCatalogStore } from '../../store/catalogStore'
+import { MapPin, Phone } from "lucide-react";
+import Logo from "../ui/Logo";
+import { useCatalogStore } from "../../store/catalogStore";
 
 export default function Footer() {
-  const storeConfig = useCatalogStore(s => s.storeConfig)
+  const storeConfig = useCatalogStore((s) => s.storeConfig);
 
   return (
     <footer className="bg-surface border-t border-border mt-20">
       <div className="max-w-6xl mx-auto px-4 py-10">
         <div className="flex flex-col sm:flex-row items-start justify-between gap-6">
           <div>
-            <div className="flex items-center gap-2 text-primary font-bold text-lg mb-2">
-              <Logo size={20} />
-              <span>Amapola Panificados</span>
+            <div className="flex items-center hover:opacity-80 transition-opacity">
+              <Logo size={150} />
             </div>
             <p className="text-text-muted text-sm">Pan artesanal con amor.</p>
           </div>
@@ -34,9 +33,10 @@ export default function Footer() {
         </div>
 
         <div className="mt-8 pt-6 border-t border-border text-center text-xs text-text-muted">
-          © {new Date().getFullYear()} Amapola Panificados · Mercedes, Buenos Aires
+          © {new Date().getFullYear()} Amapola Panificados · Mercedes, Buenos
+          Aires
         </div>
       </div>
     </footer>
-  )
+  );
 }
