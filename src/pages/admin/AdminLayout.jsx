@@ -34,9 +34,9 @@ export default function AdminLayout({ children }) {
           <Link
             key={to}
             to={to}
-            className={`flex items-center gap-2.5 px-3 py-2.5 rounded-btn text-sm font-medium transition-colors ${
+            className={`flex items-center gap-2.5 px-3 py-3 rounded-btn text-sm font-medium transition-colors ${
               location.pathname === to
-                ? 'bg-primary-light text-primary'
+                ? 'bg-[#F3EEFF] text-[#7C5CBF]'
                 : 'text-text-secondary hover:bg-stone-100 hover:text-text-primary'
             }`}
           >
@@ -72,22 +72,22 @@ export default function AdminLayout({ children }) {
         </header>
 
         {/* Mobile bottom nav */}
-        <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-surface border-t border-border flex z-40">
+        <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-surface border-t border-border flex z-40 pb-safe">
           {NAV.map(({ to, label, icon: Icon }) => (
             <Link
               key={to}
               to={to}
-              className={`flex-1 flex flex-col items-center gap-1 py-2.5 text-xs font-medium transition-colors ${
-                location.pathname === to ? 'text-primary' : 'text-text-muted'
+              className={`flex-1 flex flex-col items-center gap-1 py-3 px-1 text-xs font-medium transition-colors ${
+                location.pathname === to ? 'text-[#7C5CBF]' : 'text-text-muted'
               }`}
             >
               <Icon className="w-5 h-5" strokeWidth={2} />
-              {label}
+              <span className="text-[10px] leading-tight text-center">{label}</span>
             </Link>
           ))}
         </nav>
 
-        <main className="flex-1 p-4 md:p-8 pb-24 md:pb-8 overflow-auto">
+        <main className="flex-1 p-4 md:p-8 pb-28 md:pb-8 overflow-auto">
           {children}
         </main>
       </div>

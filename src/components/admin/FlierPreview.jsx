@@ -457,29 +457,51 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
                 {/* Info */}
                 <div style={{
                   padding: '8px',
-                  display: 'flex', flexDirection: 'column',
-                  alignItems: 'center', gap: 4, width: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: 4,
+                  width: '100%',
+                  minHeight: 80,
+                  justifyContent: 'center',
                 }}>
                   {item.label && (
                     <p style={{
-                      color: 'rgba(255,255,255,0.7)', fontSize: 10,
-                      margin: 0, textAlign: 'center', fontWeight: 600,
-                      textTransform: 'uppercase', letterSpacing: 0.5,
+                      color: 'rgba(255,255,255,0.6)',
+                      fontSize: 9,
+                      margin: 0,
+                      textAlign: 'center',
+                      fontWeight: 700,
+                      textTransform: 'uppercase',
+                      letterSpacing: 0.5,
                     }}>
                       {item.label}
                     </p>
                   )}
                   <p style={{
-                    color: 'white', fontWeight: 700, fontSize: 12,
-                    margin: 0, textAlign: 'center', lineHeight: 1.2,
+                    color: 'white',
+                    fontWeight: 700,
+                    fontSize: 12,
+                    margin: 0,
+                    textAlign: 'center',
+                    lineHeight: 1.2,
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                    maxWidth: '100%',
                   }}>
                     {item.product.name}
                   </p>
                   {item.price && (
                     <div style={{
-                      background: 'white', color: '#7C5CBF',
-                      fontWeight: 800, fontSize: 13,
-                      padding: '3px 12px', borderRadius: 50,
+                      background: 'white',
+                      color: '#7C5CBF',
+                      fontWeight: 800,
+                      fontSize: 12,
+                      padding: '4px 12px',
+                      borderRadius: 50,
+                      marginTop: 2,
+                      whiteSpace: 'nowrap',
                     }}>
                       ${Number(item.price).toLocaleString('es-AR')}
                     </div>
@@ -595,30 +617,53 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
                 </div>
                 {/* Info */}
                 <div style={{
-                  padding: '6px',
-                  display: 'flex', flexDirection: 'column',
-                  alignItems: 'center', gap: 3, width: '100%', flexShrink: 0,
+                  padding: '6px 8px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: 3,
+                  width: '100%',
+                  minHeight: 70,
+                  justifyContent: 'center',
+                  flexShrink: 0,
                 }}>
                   {item.label && (
                     <p style={{
-                      color: 'rgba(255,255,255,0.7)', fontSize: 8,
-                      margin: 0, textAlign: 'center', fontWeight: 600,
-                      textTransform: 'uppercase', letterSpacing: 0.5,
+                      color: 'rgba(255,255,255,0.6)',
+                      fontSize: 8,
+                      margin: 0,
+                      textAlign: 'center',
+                      fontWeight: 700,
+                      textTransform: 'uppercase',
+                      letterSpacing: 0.5,
                     }}>
                       {item.label}
                     </p>
                   )}
                   <p style={{
-                    color: 'white', fontWeight: 700, fontSize: 10,
-                    margin: 0, textAlign: 'center', lineHeight: 1.2,
+                    color: 'white',
+                    fontWeight: 700,
+                    fontSize: 11,
+                    margin: 0,
+                    textAlign: 'center',
+                    lineHeight: 1.2,
+                    maxWidth: '100%',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
                   }}>
                     {item.product.name}
                   </p>
                   {item.price && (
                     <div style={{
-                      background: 'white', color: '#7C5CBF',
-                      fontWeight: 800, fontSize: 10,
-                      padding: '2px 8px', borderRadius: 50,
+                      background: 'white',
+                      color: '#7C5CBF',
+                      fontWeight: 800,
+                      fontSize: 11,
+                      padding: '3px 10px',
+                      borderRadius: 50,
+                      marginTop: 2,
+                      whiteSpace: 'nowrap',
                     }}>
                       ${Number(item.price).toLocaleString('es-AR')}
                     </div>
