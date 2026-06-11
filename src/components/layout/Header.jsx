@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ShoppingCart, Flower } from "lucide-react";
+import { ShoppingCart } from "lucide-react";
 import { useCart } from "../../hooks/useCart";
 import CartDrawer from "../cart/CartDrawer";
+import Logo from "../ui/Logo";
 
 export default function Header() {
   const { totalItems } = useCart();
@@ -16,7 +17,6 @@ export default function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // close cart on navigation
   useEffect(() => {
     setCartOpen(false);
   }, [location.pathname]);
@@ -34,8 +34,8 @@ export default function Header() {
             to="/"
             className="flex items-center gap-2 text-primary font-bold text-xl hover:opacity-80 transition-opacity"
           >
-            <Flower className="w-6 h-6" strokeWidth={2} />
-            <img src="../amapola-logo.png" alt="Amapola" />
+            <Logo size={28} />
+            <span>Amapola</span>
           </Link>
 
           {/* Cart button */}

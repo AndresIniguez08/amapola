@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { Flower } from 'lucide-react'
+import Logo from '../../components/ui/Logo'
 import { useAuthStore } from '../../store/authStore'
 import Button from '../../components/ui/Button'
 
@@ -46,8 +46,8 @@ export default function AdminLoginPage() {
     <div className="min-h-screen bg-background flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
         <div className="flex flex-col items-center gap-2 mb-8">
-          <div className="w-12 h-12 rounded-full bg-primary-light flex items-center justify-center">
-            <Flower className="w-6 h-6 text-primary" strokeWidth={2} />
+          <div className="w-16 h-16 rounded-full bg-[#F3EEFF] flex items-center justify-center mx-auto">
+            <Logo size={40} />
           </div>
           <h1 className="text-xl font-bold text-text-primary">Panel Amapola</h1>
           <p className="text-sm text-text-muted">Acceso para administradores</p>

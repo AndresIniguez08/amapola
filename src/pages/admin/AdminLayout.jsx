@@ -1,5 +1,6 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { Package, Settings, LogOut, Flower, LayoutDashboard, ClipboardList, Tag } from 'lucide-react'
+import { Package, Settings, LogOut, LayoutDashboard, ClipboardList, Tag } from 'lucide-react'
+import Logo from '../../components/ui/Logo'
 import { useAuthStore } from '../../store/authStore'
 
 const NAV = [
@@ -25,7 +26,7 @@ export default function AdminLayout({ children }) {
       {/* Sidebar */}
       <aside className="hidden md:flex flex-col w-56 bg-surface border-r border-border p-4 gap-1 shrink-0">
         <div className="flex items-center gap-2 text-primary font-bold text-base px-3 py-2 mb-4">
-          <Flower className="w-5 h-5" strokeWidth={2} />
+          <Logo size={22} />
           <span>Amapola Admin</span>
         </div>
         {NAV.map(({ to, label, icon: Icon }) => (
@@ -57,7 +58,7 @@ export default function AdminLayout({ children }) {
         {/* Mobile header */}
         <header className="md:hidden flex items-center justify-between px-4 h-14 bg-surface border-b border-border">
           <div className="flex items-center gap-2 text-primary font-bold text-sm">
-            <Flower className="w-4 h-4" strokeWidth={2} />
+            <Logo size={18} />
             Amapola Admin
           </div>
           <button

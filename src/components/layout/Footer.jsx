@@ -1,4 +1,5 @@
-import { Flower, MapPin, Phone } from 'lucide-react'
+import { MapPin, Phone } from 'lucide-react'
+import Logo from '../ui/Logo'
 import { useCatalogStore } from '../../store/catalogStore'
 
 export default function Footer() {
@@ -10,7 +11,7 @@ export default function Footer() {
         <div className="flex flex-col sm:flex-row items-start justify-between gap-6">
           <div>
             <div className="flex items-center gap-2 text-primary font-bold text-lg mb-2">
-              <Flower className="w-5 h-5" strokeWidth={2} />
+              <Logo size={20} />
               <span>Amapola Panificados</span>
             </div>
             <p className="text-text-muted text-sm">Pan artesanal con amor.</p>
