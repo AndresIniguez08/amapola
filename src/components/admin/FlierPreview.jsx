@@ -54,7 +54,7 @@ export default function FlierPreview({ product, adText, format, flierRef }) {
           <img
             src="/amapola-logo.png"
             alt="Logo"
-            style={{ width: 36, height: 36, objectFit: 'contain' }}
+            style={{ width: 60, height: 60, objectFit: 'contain' }}
             crossOrigin="anonymous"
           />
           <span style={{ color: 'white', fontWeight: 700, fontSize: 16, letterSpacing: 1 }}>

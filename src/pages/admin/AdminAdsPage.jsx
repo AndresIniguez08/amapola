@@ -29,31 +29,31 @@ export default function AdminAdsPage() {
   }, [])
 
   async function handleDownload() {
-  if (!flierRef.current || !selectedProduct) return
-  setGenerating(true)
-  try {
-    const element = flierRef.current
-    const canvas = await html2canvas(element, {
-      scale: 2,
-      useCORS: true,
-      allowTaint: true,
-      backgroundColor: null,
-      logging: false,
-      width: element.offsetWidth,
-      height: element.offsetHeight,
-      windowWidth: element.offsetWidth,
-      windowHeight: element.offsetHeight,
-    })
-    const link = document.createElement('a')
-    link.download = `amapola-${selectedProduct.name.toLowerCase().replace(/\s+/g, '-')}-${format}.png`
-    link.href = canvas.toDataURL('image/png')
-    link.click()
-  } catch (err) {
-    console.error(err)
-  } finally {
-    setGenerating(false)
+    if (!flierRef.current || !selectedProduct) return
+    setDownloading(true)
+    try {
+      const element = flierRef.current
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: null,
+        logging: false,
+        width: element.offsetWidth,
+        height: element.offsetHeight,
+        windowWidth: element.offsetWidth,
+        windowHeight: element.offsetHeight,
+      })
+      const link = document.createElement('a')
+      link.download = `amapola-${selectedProduct.name.toLowerCase().replace(/\s+/g, '-')}-${format}.png`
+      link.href = canvas.toDataURL('image/png')
+      link.click()
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setDownloading(false)
+    }
   }
-}
 
   return (
     <AdminLayout>
