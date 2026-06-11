@@ -34,7 +34,8 @@ function ComboSelector({ products, comboItems, onChange }) {
         variants,
       };
     } else if (field === "variant") {
-      const found = updated[index].variants?.find((v) => v.id === value) ?? null;
+      const found =
+        updated[index].variants?.find((v) => v.id === value) ?? null;
       updated[index] = {
         ...updated[index],
         variant: found,
@@ -86,7 +87,6 @@ function ComboSelector({ products, comboItems, onChange }) {
             )}
           </div>
 
-          {/* Selector de producto */}
           <select
             className="w-full border border-border rounded-btn px-3 py-2 text-xs bg-surface text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
             value={item.product?.id ?? ""}
@@ -100,7 +100,6 @@ function ComboSelector({ products, comboItems, onChange }) {
             ))}
           </select>
 
-          {/* Selector de variante */}
           {item.product && (item.variants ?? []).length > 0 && (
             <select
               className="w-full border border-[#7C5CBF] rounded-btn px-3 py-1.5 text-xs bg-[#F3EEFF] text-[#7C5CBF] font-medium focus:outline-none focus:ring-2 focus:ring-primary/30"
@@ -111,13 +110,14 @@ function ComboSelector({ products, comboItems, onChange }) {
               {item.variants.map((v) => (
                 <option key={v.id} value={v.id}>
                   {v.name}
-                  {v.price ? ` — $${Number(v.price).toLocaleString("es-AR")}` : ""}
+                  {v.price
+                    ? ` — $${Number(v.price).toLocaleString("es-AR")}`
+                    : ""}
                 </option>
               ))}
             </select>
           )}
 
-          {/* Etiqueta y precio */}
           <div className="grid grid-cols-2 gap-2">
             <input
               className="border border-border rounded-btn px-3 py-1.5 text-xs bg-surface text-text-primary focus:outline-none"
@@ -182,7 +182,6 @@ export default function AdminAdsPage() {
 
   async function resolveImages() {
     const urls = {};
-
     const bgFile =
       templateType === "combo"
         ? "/fondo_publicidad_combo.png"
@@ -202,25 +201,29 @@ export default function AdminAdsPage() {
         }
       }
     }
-
     return urls;
   }
 
   async function handleDownload() {
     if (!flierRef.current) return;
     if (templateType === "producto" && !selectedProduct) return;
-    if (templateType === "combo" && comboItems.filter((i) => i.product).length === 0)
+    if (
+      templateType === "combo" &&
+      comboItems.filter((i) => i.product).length === 0
+    )
       return;
+
     setDownloading(true);
     try {
       const resolved = await resolveImages();
       setResolvedImages(resolved);
 
-      await new Promise((resolve) => setTimeout(resolve, 300));
+      // Esperar más tiempo para que React renderice con las imágenes base64
+      await new Promise((resolve) => setTimeout(resolve, 600));
 
       const element = flierRef.current;
       const canvas = await html2canvas(element, {
-        scale: 2,
+        scale: 3,
         useCORS: false,
         allowTaint: true,
         backgroundColor: null,
@@ -229,12 +232,13 @@ export default function AdminAdsPage() {
         width: element.offsetWidth,
         height: element.offsetHeight,
       });
+
       const link = document.createElement("a");
       link.download =
         templateType === "combo"
           ? `amapola-combo-${format}.png`
           : `amapola-${selectedProduct.name.toLowerCase().replace(/\s+/g, "-")}-${format}.png`;
-      link.href = canvas.toDataURL("image/png");
+      link.href = canvas.toDataURL("image/png", 1.0);
       link.click();
 
       setResolvedImages({});
@@ -249,14 +253,16 @@ export default function AdminAdsPage() {
   return (
     <AdminLayout>
       <div className="max-w-5xl mx-auto">
-        <h1 className="text-2xl font-bold text-text-primary mb-6">Publicidad</h1>
+        <h1 className="text-2xl font-bold text-text-primary mb-6">
+          Publicidad
+        </h1>
 
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* Panel de configuración */}
           <div className="flex flex-col gap-5 w-full lg:w-72 shrink-0">
-            {/* Selector de template */}
             <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium text-text-primary">Template</label>
+              <label className="text-sm font-medium text-text-primary">
+                Template
+              </label>
               <div className="flex gap-2">
                 {[
                   { value: "producto", label: "Producto" },
@@ -277,10 +283,11 @@ export default function AdminAdsPage() {
               </div>
             </div>
 
-            {/* Selector de producto o combo */}
             {templateType === "producto" ? (
               <div className="flex flex-col gap-1.5">
-                <label className="text-sm font-medium text-text-primary">Producto</label>
+                <label className="text-sm font-medium text-text-primary">
+                  Producto
+                </label>
                 {loading ? (
                   <div className="flex items-center gap-2 text-text-muted text-sm">
                     <Spinner size="sm" /> Cargando...
@@ -290,7 +297,9 @@ export default function AdminAdsPage() {
                     className="w-full border border-border rounded-btn px-3 py-2 text-sm bg-surface text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
                     value={selectedProduct?.id ?? ""}
                     onChange={(e) => {
-                      const found = products.find((p) => p.id === e.target.value);
+                      const found = products.find(
+                        (p) => p.id === e.target.value,
+                      );
                       setSelectedProduct(found ?? null);
                     }}
                   >
@@ -311,9 +320,10 @@ export default function AdminAdsPage() {
               />
             )}
 
-            {/* Formato */}
             <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium text-text-primary">Formato</label>
+              <label className="text-sm font-medium text-text-primary">
+                Formato
+              </label>
               <div className="flex gap-2">
                 {[
                   { value: "instagram", label: "Instagram (1:1)" },
@@ -334,7 +344,6 @@ export default function AdminAdsPage() {
               </div>
             </div>
 
-            {/* Texto del anuncio */}
             <div className="flex flex-col gap-1.5">
               <label className="text-sm font-medium text-text-primary">
                 {templateType === "combo" ? (
@@ -342,7 +351,9 @@ export default function AdminAdsPage() {
                 ) : (
                   <span>
                     Texto del anuncio{" "}
-                    <span className="text-text-muted font-normal">(opcional)</span>
+                    <span className="text-text-muted font-normal">
+                      (opcional)
+                    </span>
                   </span>
                 )}
               </label>
@@ -359,7 +370,6 @@ export default function AdminAdsPage() {
               />
             </div>
 
-            {/* Botón descargar */}
             <Button
               onClick={handleDownload}
               disabled={isDownloadDisabled}
@@ -374,7 +384,6 @@ export default function AdminAdsPage() {
             </Button>
           </div>
 
-          {/* Preview */}
           <div className="flex-1 flex flex-col items-center gap-3">
             <p className="text-xs text-text-muted self-start">Preview</p>
             <div className="overflow-auto max-w-full">

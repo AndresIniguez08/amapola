@@ -41,12 +41,21 @@ export default function FlierPreview({
   const mainImageSrc = resolvedImages["main"] ?? displayImage;
   const bgSrc = resolvedImages["background"];
 
+  // Dimensiones base altas para mejor calidad al descargar
+  const INST_W = 800;
+  const INST_H = 800;
+  const WA_W = 800;
+  const WA_H = 600;
+
   if (templateType === "producto" && !product) {
     return (
       <div className="flex flex-col gap-4 w-full">
         <div
           className="flex items-center justify-center bg-stone-100 rounded-2xl"
-          style={{ width: 540, height: isInstagram ? 540 : 405 }}
+          style={{
+            width: INST_W / 1.5,
+            height: isInstagram ? INST_H / 1.5 : WA_H / 1.5,
+          }}
         >
           <p className="text-stone-400 text-sm">
             Seleccioná un producto para ver la preview
@@ -61,7 +70,10 @@ export default function FlierPreview({
       <div className="flex flex-col gap-4 w-full">
         <div
           className="flex items-center justify-center bg-stone-100 rounded-2xl"
-          style={{ width: 540, height: isInstagram ? 540 : 405 }}
+          style={{
+            width: INST_W / 1.5,
+            height: isInstagram ? INST_H / 1.5 : WA_H / 1.5,
+          }}
         >
           <p className="text-stone-400 text-sm">
             Seleccioná al menos un producto para el combo
@@ -112,8 +124,8 @@ export default function FlierPreview({
         <div
           ref={flierRef}
           style={{
-            width: 540,
-            height: 540,
+            width: INST_W,
+            height: INST_H,
             backgroundImage: bgSrc
               ? `url(${bgSrc})`
               : "url(/fondo_publicidad.png)",
@@ -124,22 +136,160 @@ export default function FlierPreview({
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            padding: "40px 60px",
+            padding: "60px 80px",
             fontFamily: "'Plus Jakarta Sans', sans-serif",
             boxSizing: "border-box",
             overflow: "hidden",
             position: "relative",
-            gap: 16,
+            gap: 24,
           }}
         >
           <div
             style={{
-              width: 200,
-              height: 200,
-              borderRadius: 20,
+              width: 300,
+              height: 300,
+              borderRadius: 28,
               overflow: "hidden",
               flexShrink: 0,
-              boxShadow: "0 8px 32px rgba(61,42,107,0.25)",
+              boxShadow: "0 12px 48px rgba(61,42,107,0.25)",
+              border: "5px solid rgba(255,255,255,0.9)",
+            }}
+          >
+            {displayImage ? (
+              <div
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  backgroundImage: `url(${mainImageSrc})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
+                }}
+              />
+            ) : (
+              <div
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  background: "#F3EEFF",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <span style={{ fontSize: 64 }}>🍞</span>
+              </div>
+            )}
+          </div>
+
+          <div
+            style={{
+              background: "rgba(255,255,255,0.85)",
+              borderRadius: 24,
+              padding: "28px 44px",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 14,
+              width: "100%",
+              boxSizing: "border-box",
+              boxShadow: "0 4px 24px rgba(61,42,107,0.12)",
+            }}
+          >
+            <p
+              style={{
+                color: "#3D2A6B",
+                fontWeight: 800,
+                fontSize: 32,
+                textAlign: "center",
+                margin: 0,
+                lineHeight: 1.2,
+              }}
+            >
+              {displayName}
+            </p>
+            <div
+              style={{
+                width: 56,
+                height: 3,
+                background: "#7C5CBF",
+                borderRadius: 2,
+              }}
+            />
+            {adText && (
+              <p
+                style={{
+                  color: "#5E3FA3",
+                  fontSize: 18,
+                  textAlign: "center",
+                  margin: 0,
+                  fontStyle: "italic",
+                  lineHeight: 1.4,
+                }}
+              >
+                {adText}
+              </p>
+            )}
+            <div
+              style={{
+                background: "#7C5CBF",
+                color: "white",
+                fontWeight: 800,
+                fontSize: 32,
+                padding: "14px 44px",
+                borderRadius: 50,
+              }}
+            >
+              {formatPrice(displayPrice)}
+            </div>
+          </div>
+
+          <p
+            style={{
+              color: "#9B8AAF",
+              fontSize: 16,
+              margin: 0,
+              zIndex: 1,
+              letterSpacing: 0.5,
+            }}
+          >
+            amapola.pulsowebstudio.com.ar
+          </p>
+        </div>
+      )}
+
+      {/* ── Flyer WhatsApp — Producto ── */}
+      {templateType === "producto" && !isInstagram && (
+        <div
+          ref={flierRef}
+          style={{
+            width: WA_W,
+            height: WA_H,
+            backgroundImage: bgSrc
+              ? `url(${bgSrc})`
+              : "url(/fondo_publicidad.png)",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontFamily: "'Plus Jakarta Sans', sans-serif",
+            boxSizing: "border-box",
+            overflow: "hidden",
+            position: "relative",
+            padding: "48px 60px",
+            gap: 32,
+          }}
+        >
+          <div
+            style={{
+              width: 240,
+              height: 240,
+              borderRadius: 24,
+              overflow: "hidden",
+              flexShrink: 0,
+              boxShadow: "0 12px 36px rgba(61,42,107,0.25)",
               border: "4px solid rgba(255,255,255,0.9)",
             }}
           >
@@ -165,145 +315,7 @@ export default function FlierPreview({
                   justifyContent: "center",
                 }}
               >
-                <span style={{ fontSize: 48 }}>🍞</span>
-              </div>
-            )}
-          </div>
-
-          <div
-            style={{
-              background: "rgba(255,255,255,0.85)",
-              borderRadius: 20,
-              padding: "20px 32px",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: 10,
-              width: "100%",
-              boxSizing: "border-box",
-              boxShadow: "0 4px 20px rgba(61,42,107,0.12)",
-            }}
-          >
-            <p
-              style={{
-                color: "#3D2A6B",
-                fontWeight: 800,
-                fontSize: 22,
-                textAlign: "center",
-                margin: 0,
-                lineHeight: 1.2,
-              }}
-            >
-              {displayName}
-            </p>
-            <div
-              style={{
-                width: 40,
-                height: 2,
-                background: "#7C5CBF",
-                borderRadius: 2,
-              }}
-            />
-            {adText && (
-              <p
-                style={{
-                  color: "#5E3FA3",
-                  fontSize: 13,
-                  textAlign: "center",
-                  margin: 0,
-                  fontStyle: "italic",
-                  lineHeight: 1.4,
-                }}
-              >
-                {adText}
-              </p>
-            )}
-            <div
-              style={{
-                background: "#7C5CBF",
-                color: "white",
-                fontWeight: 800,
-                fontSize: 22,
-                padding: "10px 32px",
-                borderRadius: 50,
-              }}
-            >
-              {formatPrice(displayPrice)}
-            </div>
-          </div>
-
-          <p
-            style={{
-              color: "#9B8AAF",
-              fontSize: 11,
-              margin: 0,
-              zIndex: 1,
-              letterSpacing: 0.5,
-            }}
-          >
-            amapola.pulsowebstudio.com.ar
-          </p>
-        </div>
-      )}
-
-      {/* ── Flyer WhatsApp — Producto ── */}
-      {templateType === "producto" && !isInstagram && (
-        <div
-          ref={flierRef}
-          style={{
-            width: 540,
-            height: 405,
-            backgroundImage: bgSrc
-              ? `url(${bgSrc})`
-              : "url(/fondo_publicidad.png)",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontFamily: "'Plus Jakarta Sans', sans-serif",
-            boxSizing: "border-box",
-            overflow: "hidden",
-            position: "relative",
-            padding: "30px 40px",
-            gap: 20,
-          }}
-        >
-          <div
-            style={{
-              width: 160,
-              height: 160,
-              borderRadius: 18,
-              overflow: "hidden",
-              flexShrink: 0,
-              boxShadow: "0 8px 24px rgba(61,42,107,0.25)",
-              border: "3px solid rgba(255,255,255,0.9)",
-            }}
-          >
-            {displayImage ? (
-              <div
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  backgroundImage: `url(${mainImageSrc})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                  backgroundRepeat: "no-repeat",
-                }}
-              />
-            ) : (
-              <div
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  background: "#F3EEFF",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <span style={{ fontSize: 40 }}>🍞</span>
+                <span style={{ fontSize: 56 }}>🍞</span>
               </div>
             )}
           </div>
@@ -312,13 +324,13 @@ export default function FlierPreview({
             style={{
               flex: 1,
               background: "rgba(255,255,255,0.85)",
-              borderRadius: 18,
-              padding: "20px 24px",
+              borderRadius: 24,
+              padding: "32px 36px",
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
-              gap: 10,
-              boxShadow: "0 4px 20px rgba(61,42,107,0.12)",
+              gap: 14,
+              boxShadow: "0 4px 24px rgba(61,42,107,0.12)",
               boxSizing: "border-box",
             }}
           >
@@ -326,7 +338,7 @@ export default function FlierPreview({
               style={{
                 color: "#3D2A6B",
                 fontWeight: 800,
-                fontSize: 18,
+                fontSize: 28,
                 margin: 0,
                 lineHeight: 1.2,
               }}
@@ -335,8 +347,8 @@ export default function FlierPreview({
             </p>
             <div
               style={{
-                width: 36,
-                height: 2,
+                width: 48,
+                height: 3,
                 background: "#7C5CBF",
                 borderRadius: 2,
               }}
@@ -345,7 +357,7 @@ export default function FlierPreview({
               <p
                 style={{
                   color: "#5E3FA3",
-                  fontSize: 12,
+                  fontSize: 16,
                   margin: 0,
                   fontStyle: "italic",
                   lineHeight: 1.4,
@@ -359,8 +371,8 @@ export default function FlierPreview({
                 background: "#7C5CBF",
                 color: "white",
                 fontWeight: 800,
-                fontSize: 18,
-                padding: "8px 20px",
+                fontSize: 28,
+                padding: "12px 28px",
                 borderRadius: 50,
                 alignSelf: "flex-start",
               }}
@@ -370,7 +382,7 @@ export default function FlierPreview({
             <p
               style={{
                 color: "#9B8AAF",
-                fontSize: 10,
+                fontSize: 14,
                 margin: "4px 0 0 0",
                 letterSpacing: 0.5,
               }}
@@ -386,8 +398,8 @@ export default function FlierPreview({
         <div
           ref={flierRef}
           style={{
-            width: 540,
-            height: 540,
+            width: INST_W,
+            height: INST_H,
             backgroundImage: bgSrc
               ? `url(${bgSrc})`
               : "url(/fondo_publicidad_combo.png)",
@@ -397,21 +409,21 @@ export default function FlierPreview({
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            padding: "20px",
+            padding: "28px",
             fontFamily: "'Plus Jakarta Sans', sans-serif",
             boxSizing: "border-box",
             overflow: "hidden",
             position: "relative",
-            gap: 14,
+            gap: 18,
           }}
         >
           <div
             style={{
               background: "rgba(255,255,255,0.82)",
               borderRadius: 50,
-              padding: "8px 28px",
+              padding: "10px 36px",
               zIndex: 1,
-              boxShadow: "0 2px 12px rgba(61,42,107,0.12)",
+              boxShadow: "0 2px 16px rgba(61,42,107,0.12)",
               flexShrink: 0,
             }}
           >
@@ -419,9 +431,9 @@ export default function FlierPreview({
               style={{
                 color: "#3D2A6B",
                 fontWeight: 800,
-                fontSize: 18,
+                fontSize: 26,
                 margin: 0,
-                letterSpacing: 2,
+                letterSpacing: 3,
                 textTransform: "uppercase",
               }}
             >
@@ -433,7 +445,7 @@ export default function FlierPreview({
             style={{
               display: "grid",
               gridTemplateColumns: "1fr 1fr",
-              gap: 10,
+              gap: 14,
               zIndex: 1,
               width: "100%",
               flex: 1,
@@ -455,17 +467,17 @@ export default function FlierPreview({
                   key={index}
                   style={{
                     background: "rgba(255,255,255,0.82)",
-                    borderRadius: 16,
+                    borderRadius: 20,
                     overflow: "hidden",
                     display: "flex",
                     flexDirection: "column",
-                    boxShadow: "0 4px 16px rgba(61,42,107,0.1)",
+                    boxShadow: "0 4px 20px rgba(61,42,107,0.1)",
                   }}
                 >
                   <div
                     style={{
                       width: "100%",
-                      height: itemCount <= 2 ? 200 : 110,
+                      height: itemCount <= 2 ? 280 : 160,
                       flexShrink: 0,
                       overflow: "hidden",
                     }}
@@ -492,17 +504,17 @@ export default function FlierPreview({
                           justifyContent: "center",
                         }}
                       >
-                        <span style={{ fontSize: 28 }}>🍞</span>
+                        <span style={{ fontSize: 40 }}>🍞</span>
                       </div>
                     )}
                   </div>
                   <div
                     style={{
-                      padding: itemCount <= 2 ? "10px 12px" : "6px 8px",
+                      padding: itemCount <= 2 ? "14px 16px" : "10px 12px",
                       display: "flex",
                       flexDirection: "column",
                       alignItems: "center",
-                      gap: itemCount <= 2 ? 5 : 3,
+                      gap: itemCount <= 2 ? 8 : 5,
                       flex: 1,
                       justifyContent: "center",
                     }}
@@ -511,7 +523,7 @@ export default function FlierPreview({
                       <p
                         style={{
                           color: "#5E3FA3",
-                          fontSize: 10,
+                          fontSize: itemCount <= 2 ? 13 : 11,
                           margin: 0,
                           textAlign: "center",
                           fontWeight: 700,
@@ -526,7 +538,7 @@ export default function FlierPreview({
                       style={{
                         color: "#2D1F4E",
                         fontWeight: 800,
-                        fontSize: itemCount <= 2 ? 15 : 11,
+                        fontSize: itemCount <= 2 ? 20 : 15,
                         margin: 0,
                         textAlign: "center",
                         lineHeight: 1.2,
@@ -544,11 +556,11 @@ export default function FlierPreview({
                           background: "#7C5CBF",
                           color: "white",
                           fontWeight: 800,
-                          fontSize: itemCount <= 2 ? 15 : 11,
-                          padding: itemCount <= 2 ? "5px 14px" : "3px 10px",
+                          fontSize: itemCount <= 2 ? 20 : 15,
+                          padding: itemCount <= 2 ? "7px 20px" : "5px 14px",
                           borderRadius: 50,
                           whiteSpace: "nowrap",
-                          boxShadow: "0 2px 8px rgba(61,42,107,0.25)",
+                          boxShadow: "0 2px 10px rgba(61,42,107,0.25)",
                         }}
                       >
                         ${Number(itemPrice).toLocaleString("es-AR")}
@@ -563,7 +575,7 @@ export default function FlierPreview({
           <p
             style={{
               color: "#9B8AAF",
-              fontSize: 10,
+              fontSize: 14,
               margin: 0,
               zIndex: 1,
               letterSpacing: 0.5,
@@ -580,8 +592,8 @@ export default function FlierPreview({
         <div
           ref={flierRef}
           style={{
-            width: 540,
-            height: 405,
+            width: WA_W,
+            height: WA_H,
             backgroundImage: bgSrc
               ? `url(${bgSrc})`
               : "url(/fondo_publicidad_combo.png)",
@@ -594,8 +606,8 @@ export default function FlierPreview({
             boxSizing: "border-box",
             overflow: "hidden",
             position: "relative",
-            padding: "16px",
-            gap: 12,
+            padding: "20px",
+            gap: 16,
           }}
         >
           <div
@@ -605,17 +617,17 @@ export default function FlierPreview({
               style={{
                 background: "rgba(255,255,255,0.82)",
                 borderRadius: 50,
-                padding: "6px 24px",
-                boxShadow: "0 2px 12px rgba(61,42,107,0.12)",
+                padding: "8px 32px",
+                boxShadow: "0 2px 16px rgba(61,42,107,0.12)",
               }}
             >
               <p
                 style={{
                   color: "#3D2A6B",
                   fontWeight: 800,
-                  fontSize: 14,
+                  fontSize: 20,
                   margin: 0,
-                  letterSpacing: 2,
+                  letterSpacing: 3,
                   textTransform: "uppercase",
                 }}
               >
@@ -628,7 +640,7 @@ export default function FlierPreview({
             style={{
               display: "grid",
               gridTemplateColumns: `repeat(${Math.min(filledComboItems.length, 4)}, 1fr)`,
-              gap: 8,
+              gap: 10,
               flex: 1,
               minHeight: 0,
               overflow: "hidden",
@@ -649,11 +661,11 @@ export default function FlierPreview({
                   key={index}
                   style={{
                     background: "rgba(255,255,255,0.82)",
-                    borderRadius: 12,
+                    borderRadius: 16,
                     overflow: "hidden",
                     display: "flex",
                     flexDirection: "column",
-                    boxShadow: "0 4px 12px rgba(61,42,107,0.1)",
+                    boxShadow: "0 4px 16px rgba(61,42,107,0.1)",
                   }}
                 >
                   <div
@@ -686,25 +698,27 @@ export default function FlierPreview({
                           justifyContent: "center",
                         }}
                       >
-                        <span style={{ fontSize: 24 }}>🍞</span>
+                        <span style={{ fontSize: 32 }}>🍞</span>
                       </div>
                     )}
                   </div>
                   <div
                     style={{
-                      padding: "8px",
+                      padding: "10px 8px",
                       display: "flex",
                       flexDirection: "column",
                       alignItems: "center",
-                      gap: 4,
+                      gap: 5,
                       flexShrink: 0,
+                      minHeight: 90,
+                      justifyContent: "center",
                     }}
                   >
                     {item.label && (
                       <p
                         style={{
                           color: "#5E3FA3",
-                          fontSize: 8,
+                          fontSize: 11,
                           margin: 0,
                           textAlign: "center",
                           fontWeight: 700,
@@ -719,14 +733,13 @@ export default function FlierPreview({
                       style={{
                         color: "#2D1F4E",
                         fontWeight: 800,
-                        fontSize: 11,
+                        fontSize: 14,
                         margin: 0,
                         textAlign: "center",
-                        lineHeight: 1.2,
+                        lineHeight: 1.3,
                         maxWidth: "100%",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        whiteSpace: "nowrap",
+                        wordBreak: "break-word",
+                        whiteSpace: "normal",
                       }}
                     >
                       {itemName}
@@ -737,11 +750,12 @@ export default function FlierPreview({
                           background: "#7C5CBF",
                           color: "white",
                           fontWeight: 800,
-                          fontSize: 11,
-                          padding: "4px 10px",
+                          fontSize: 14,
+                          padding: "5px 14px",
                           borderRadius: 50,
                           whiteSpace: "nowrap",
-                          boxShadow: "0 2px 8px rgba(61,42,107,0.25)",
+                          boxShadow: "0 2px 10px rgba(61,42,107,0.25)",
+                          marginTop: 2,
                         }}
                       >
                         ${Number(itemPrice).toLocaleString("es-AR")}
@@ -756,7 +770,7 @@ export default function FlierPreview({
           <p
             style={{
               color: "#9B8AAF",
-              fontSize: 10,
+              fontSize: 14,
               margin: 0,
               zIndex: 1,
               letterSpacing: 0.5,
