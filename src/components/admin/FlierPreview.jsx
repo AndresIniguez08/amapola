@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { formatPrice } from '../../lib/formatters'
 import { supabase } from '../../lib/supabase'
 
-export default function FlierPreview({ product, adText, format, flierRef, templateType = 'producto', comboItems = [] }) {
+export default function FlierPreview({ product, adText, format, flierRef, templateType = 'producto', comboItems = [], resolvedImages = {} }) {
   const isInstagram = format === 'instagram'
   const [variants, setVariants] = useState([])
   const [selectedVariant, setSelectedVariant] = useState(null)
@@ -29,6 +29,8 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
     : product?.name
 
   const filledComboItems = comboItems.filter(i => i.product)
+  const mainImageSrc = resolvedImages['main'] ?? displayImage
+  const logoSrc = resolvedImages['logo'] ?? '/amapola-logo.png'
 
   if (templateType === 'producto' && !product) {
     return (
@@ -138,7 +140,7 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
               padding: 8,
             }}>
               <img
-                src="/amapola-logo.png"
+                src={logoSrc}
                 alt="Logo"
                 style={{ width: 64, height: 64, objectFit: 'contain' }}
                 crossOrigin="anonymous"
@@ -160,7 +162,7 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
                 style={{
                   width: '100%',
                   height: '100%',
-                  backgroundImage: `url(${displayImage})`,
+                  backgroundImage: `url(${mainImageSrc})`,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
                   backgroundRepeat: 'no-repeat',
@@ -261,7 +263,7 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
               padding: 6,
             }}>
               <img
-                src="/amapola-logo.png"
+                src={logoSrc}
                 alt="Logo"
                 style={{ width: 44, height: 44, objectFit: 'contain' }}
                 crossOrigin="anonymous"
@@ -278,7 +280,7 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
                   style={{
                     width: '100%',
                     height: '100%',
-                    backgroundImage: `url(${displayImage})`,
+                    backgroundImage: `url(${mainImageSrc})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat',
@@ -388,7 +390,7 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
               display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 6,
             }}>
               <img
-                src="/amapola-logo.png"
+                src={logoSrc}
                 alt="Logo"
                 style={{ width: 52, height: 52, objectFit: 'contain' }}
                 crossOrigin="anonymous"
@@ -436,7 +438,7 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
                       style={{
                         width: '100%',
                         height: '100%',
-                        backgroundImage: `url(${item.product.image_url})`,
+                        backgroundImage: `url(${resolvedImages['combo_' + index] ?? item.product.image_url})`,
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
                         backgroundRepeat: 'no-repeat',
@@ -535,7 +537,7 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
               display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 4,
             }}>
               <img
-                src="/amapola-logo.png"
+                src={logoSrc}
                 alt="Logo"
                 style={{ width: 28, height: 28, objectFit: 'contain' }}
                 crossOrigin="anonymous"
@@ -575,7 +577,7 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
                       style={{
                         width: '100%',
                         height: '100%',
-                        backgroundImage: `url(${item.product.image_url})`,
+                        backgroundImage: `url(${resolvedImages['combo_' + index] ?? item.product.image_url})`,
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
                         backgroundRepeat: 'no-repeat',

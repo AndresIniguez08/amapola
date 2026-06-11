@@ -6,6 +6,8 @@ import AdminLayout from './AdminLayout'
 import FlierPreview from '../../components/admin/FlierPreview'
 import Button from '../../components/ui/Button'
 import Spinner from '../../components/ui/Spinner'
+import toast from 'react-hot-toast'
+import { urlToBase64 } from '../../lib/imageUtils'
 
 function ComboSelector({ products, comboItems, onChange }) {
   function updateItem(index, field, value) {
@@ -101,6 +103,7 @@ export default function AdminAdsPage() {
     { product: null, label: '', price: '' },
   ])
   const [downloading, setDownloading] = useState(false)
+  const [resolvedImages, setResolvedImages] = useState({})
   const flierRef = useRef(null)
 
   useEffect(() => {
@@ -121,24 +124,44 @@ export default function AdminAdsPage() {
       : comboItems.filter(i => i.product).length === 0
   )
 
+  async function resolveImages() {
+    const urls = {}
+    if (templateType === 'producto' && selectedProduct?.image_url) {
+      urls['main'] = await urlToBase64(selectedProduct.image_url)
+    }
+    if (templateType === 'combo') {
+      const filled = comboItems.filter(i => i.product)
+      for (let i = 0; i < filled.length; i++) {
+        if (filled[i].product?.image_url) {
+          urls['combo_' + i] = await urlToBase64(filled[i].product.image_url)
+        }
+      }
+    }
+    urls['logo'] = await urlToBase64('/amapola-logo.png')
+    return urls
+  }
+
   async function handleDownload() {
     if (!flierRef.current) return
     if (templateType === 'producto' && !selectedProduct) return
     if (templateType === 'combo' && comboItems.filter(i => i.product).length === 0) return
     setDownloading(true)
     try {
+      const resolved = await resolveImages()
+      setResolvedImages(resolved)
+
+      await new Promise(resolve => setTimeout(resolve, 300))
+
       const element = flierRef.current
       const canvas = await html2canvas(element, {
         scale: 2,
-        useCORS: true,
-        allowTaint: false,
+        useCORS: false,
+        allowTaint: true,
         backgroundColor: null,
         logging: false,
         imageTimeout: 0,
         width: element.offsetWidth,
         height: element.offsetHeight,
-        windowWidth: element.offsetWidth,
-        windowHeight: element.offsetHeight,
       })
       const link = document.createElement('a')
       link.download = templateType === 'combo'
@@ -146,8 +169,11 @@ export default function AdminAdsPage() {
         : `amapola-${selectedProduct.name.toLowerCase().replace(/\s+/g, '-')}-${format}.png`
       link.href = canvas.toDataURL('image/png')
       link.click()
+
+      setResolvedImages({})
     } catch (err) {
       console.error(err)
+      toast.error('Error al generar la imagen')
     } finally {
       setDownloading(false)
     }
@@ -282,6 +308,7 @@ export default function AdminAdsPage() {
                 flierRef={flierRef}
                 templateType={templateType}
                 comboItems={comboItems}
+                resolvedImages={resolvedImages}
               />
             </div>
           </div>
