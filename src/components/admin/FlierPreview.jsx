@@ -34,7 +34,7 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
   const fontSize = itemCount <= 2 ? 14 : 11
   const priceSize = itemCount <= 2 ? 14 : 11
   const mainImageSrc = resolvedImages['main'] ?? displayImage
-  const logoSrc = resolvedImages['logo'] ?? '/amapola-logo.png'
+  const bgSrc = resolvedImages['background']
 
   if (templateType === 'producto' && !product) {
     return (
@@ -107,7 +107,10 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
           style={{
             width: 540,
             height: 540,
-            background: 'linear-gradient(135deg, #4A3070 0%, #7C5CBF 50%, #9B7FD4 100%)',
+            backgroundImage: bgSrc ? `url(${bgSrc})` : 'url(/fondo_publicidad.png)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -119,39 +122,6 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
             position: 'relative',
           }}
         >
-          {/* Círculos decorativos */}
-          <div style={{
-            position: 'absolute', top: -60, right: -60,
-            width: 200, height: 200, borderRadius: '50%',
-            background: 'rgba(255,255,255,0.06)',
-          }} />
-          <div style={{
-            position: 'absolute', bottom: -40, left: -40,
-            width: 150, height: 150, borderRadius: '50%',
-            background: 'rgba(255,255,255,0.06)',
-          }} />
-
-          {/* Logo con fondo circular */}
-          <div style={{ zIndex: 1, display: 'flex', justifyContent: 'center' }}>
-            <div style={{
-              width: 80,
-              height: 80,
-              borderRadius: '50%',
-              background: 'rgba(255,255,255,0.15)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: 8,
-            }}>
-              <img
-                src={logoSrc}
-                alt="Logo"
-                style={{ width: 64, height: 64, objectFit: 'contain' }}
-                crossOrigin="anonymous"
-              />
-            </div>
-          </div>
-
           {/* Imagen del producto */}
           <div style={{
             width: 260, height: 260,
@@ -189,7 +159,7 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
             alignItems: 'center', gap: 8, zIndex: 1, width: '100%',
           }}>
             <p style={{
-              color: 'white', fontWeight: 800, fontSize: 20,
+              color: '#3D2A6B', fontWeight: 800, fontSize: 20,
               textAlign: 'center', margin: 0, lineHeight: 1.2,
             }}>
               {displayName}
@@ -197,13 +167,13 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
 
             <div style={{
               width: 60, height: 2,
-              background: 'rgba(255,255,255,0.4)',
+              background: '#7C5CBF',
               borderRadius: 2,
             }} />
 
             {adText && (
               <p style={{
-                color: 'rgba(255,255,255,0.85)', fontSize: 13,
+                color: '#5E3FA3', fontSize: 13,
                 textAlign: 'center', margin: 0, fontStyle: 'italic',
                 lineHeight: 1.4, maxWidth: 380,
               }}>
@@ -226,7 +196,7 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
 
           {/* Footer */}
           <p style={{
-            color: 'rgba(255,255,255,0.45)', fontSize: 11,
+            color: '#9B8AAF', fontSize: 11,
             margin: 0, zIndex: 1, letterSpacing: 0.5,
           }}>
             amapola.pulsowebstudio.com.ar
@@ -241,7 +211,10 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
           style={{
             width: 540,
             height: 405,
-            background: 'linear-gradient(135deg, #4A3070 0%, #7C5CBF 60%, #9B7FD4 100%)',
+            backgroundImage: bgSrc ? `url(${bgSrc})` : 'url(/fondo_publicidad.png)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
             display: 'flex',
             flexDirection: 'column',
             fontFamily: "'Plus Jakarta Sans', sans-serif",
@@ -250,30 +223,12 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
             position: 'relative',
           }}
         >
-          {/* Header con logo */}
+          {/* Header sin logo — incluido en la imagen de fondo */}
           <div style={{
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             padding: '10px 20px',
-            borderBottom: '1px solid rgba(255,255,255,0.1)',
-          }}>
-            <div style={{
-              width: 56,
-              height: 56,
-              borderRadius: '50%',
-              background: 'rgba(255,255,255,0.15)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: 6,
-            }}>
-              <img
-                src={logoSrc}
-                alt="Logo"
-                style={{ width: 44, height: 44, objectFit: 'contain' }}
-                crossOrigin="anonymous"
-              />
-            </div>
-          </div>
+            borderBottom: '1px solid rgba(124,92,191,0.15)',
+          }} />
 
           {/* Body */}
           <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
@@ -308,7 +263,7 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
               justifyContent: 'center', gap: 10,
             }}>
               <p style={{
-                color: 'white', fontWeight: 800, fontSize: 18,
+                color: '#3D2A6B', fontWeight: 800, fontSize: 18,
                 margin: 0, lineHeight: 1.2,
               }}>
                 {displayName}
@@ -316,7 +271,7 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
 
               {adText && (
                 <p style={{
-                  color: 'rgba(255,255,255,0.8)', fontSize: 12,
+                  color: '#5E3FA3', fontSize: 12,
                   margin: 0, fontStyle: 'italic', lineHeight: 1.4,
                 }}>
                   {adText}
@@ -342,11 +297,11 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
           {/* Footer */}
           <div style={{
             padding: '10px 20px',
-            borderTop: '1px solid rgba(255,255,255,0.1)',
+            borderTop: '1px solid rgba(124,92,191,0.15)',
             textAlign: 'center',
           }}>
             <p style={{
-              color: 'rgba(255,255,255,0.4)', fontSize: 10,
+              color: '#9B8AAF', fontSize: 10,
               margin: 0, letterSpacing: 0.5,
             }}>
               amapola.pulsowebstudio.com.ar
@@ -362,7 +317,10 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
           style={{
             width: 540,
             height: 540,
-            background: 'linear-gradient(135deg, #4A3070 0%, #7C5CBF 50%, #9B7FD4 100%)',
+            backgroundImage: bgSrc ? `url(${bgSrc})` : 'url(/fondo_publicidad_combo.png)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -374,43 +332,15 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
             gap: 12,
           }}
         >
-          {/* Círculos decorativos */}
-          <div style={{
-            position: 'absolute', top: -60, right: -60,
-            width: 200, height: 200, borderRadius: '50%',
-            background: 'rgba(255,255,255,0.06)',
-          }} />
-          <div style={{
-            position: 'absolute', bottom: -40, left: -40,
-            width: 150, height: 150, borderRadius: '50%',
-            background: 'rgba(255,255,255,0.06)',
-          }} />
-
-          {/* Logo */}
-          <div style={{ zIndex: 1, display: 'flex', justifyContent: 'center' }}>
-            <div style={{
-              width: 64, height: 64, borderRadius: '50%',
-              background: 'rgba(255,255,255,0.15)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 6,
-            }}>
-              <img
-                src={logoSrc}
-                alt="Logo"
-                style={{ width: 52, height: 52, objectFit: 'contain' }}
-                crossOrigin="anonymous"
-              />
-            </div>
-          </div>
-
           {/* Título */}
           <div style={{
-            background: 'rgba(255,255,255,0.15)',
+            background: 'rgba(124,92,191,0.15)',
             borderRadius: 50,
             padding: '6px 24px',
             zIndex: 1,
           }}>
             <p style={{
-              color: 'white', fontWeight: 800, fontSize: 18,
+              color: '#3D2A6B', fontWeight: 800, fontSize: 18,
               margin: 0, letterSpacing: 2, textTransform: 'uppercase',
             }}>
               {adText || 'Ofertas'}
@@ -432,7 +362,7 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
               const itemPrice = item.price || (item.variant?.price ?? item.product?.price)
               return (
                 <div key={index} style={{
-                  background: 'rgba(255,255,255,0.1)',
+                  background: 'rgba(124,92,191,0.12)',
                   borderRadius: 14,
                   overflow: 'hidden',
                   display: 'flex',
@@ -475,7 +405,7 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
                   }}>
                     {item.label && (
                       <p style={{
-                        color: 'rgba(255,255,255,0.6)',
+                        color: '#7C5CBF',
                         fontSize: 9,
                         margin: 0,
                         textAlign: 'center',
@@ -487,7 +417,7 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
                       </p>
                     )}
                     <p style={{
-                      color: 'white',
+                      color: '#3D2A6B',
                       fontWeight: 700,
                       fontSize: fontSize,
                       margin: 0,
@@ -502,8 +432,8 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
                     </p>
                     {itemPrice && (
                       <div style={{
-                        background: 'white',
-                        color: '#7C5CBF',
+                        background: '#7C5CBF',
+                        color: 'white',
                         fontWeight: 800,
                         fontSize: priceSize,
                         padding: '4px 12px',
@@ -522,7 +452,7 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
 
           {/* Footer */}
           <p style={{
-            color: 'rgba(255,255,255,0.4)', fontSize: 10,
+            color: '#9B8AAF', fontSize: 10,
             margin: 0, zIndex: 1, letterSpacing: 0.5,
           }}>
             amapola.pulsowebstudio.com.ar
@@ -537,7 +467,10 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
           style={{
             width: 540,
             height: 405,
-            background: 'linear-gradient(135deg, #4A3070 0%, #7C5CBF 60%, #9B7FD4 100%)',
+            backgroundImage: bgSrc ? `url(${bgSrc})` : 'url(/fondo_publicidad_combo.png)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
             display: 'flex',
             flexDirection: 'column',
             fontFamily: "'Plus Jakarta Sans', sans-serif",
@@ -546,36 +479,16 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
             position: 'relative',
           }}
         >
-          {/* Círculo decorativo */}
-          <div style={{
-            position: 'absolute', top: -40, right: -40,
-            width: 140, height: 140, borderRadius: '50%',
-            background: 'rgba(255,255,255,0.06)',
-          }} />
-
-          {/* Header: logo + título */}
+          {/* Header: solo título — logo incluido en el fondo */}
           <div style={{
             height: 50,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            gap: 10,
-            borderBottom: '1px solid rgba(255,255,255,0.1)',
+            borderBottom: '1px solid rgba(124,92,191,0.15)',
             flexShrink: 0,
             zIndex: 1,
           }}>
-            <div style={{
-              width: 36, height: 36, borderRadius: '50%',
-              background: 'rgba(255,255,255,0.15)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 4,
-            }}>
-              <img
-                src={logoSrc}
-                alt="Logo"
-                style={{ width: 28, height: 28, objectFit: 'contain' }}
-                crossOrigin="anonymous"
-              />
-            </div>
             <p style={{
-              color: 'white', fontWeight: 800, fontSize: 14,
+              color: '#3D2A6B', fontWeight: 800, fontSize: 14,
               margin: 0, letterSpacing: 2, textTransform: 'uppercase',
             }}>
               {adText || 'Ofertas'}
@@ -598,7 +511,7 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
               const itemPrice = item.price || (item.variant?.price ?? item.product?.price)
               return (
                 <div key={index} style={{
-                  background: 'rgba(255,255,255,0.1)',
+                  background: 'rgba(124,92,191,0.12)',
                   borderRadius: 12,
                   overflow: 'hidden',
                   display: 'flex',
@@ -642,7 +555,7 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
                   }}>
                     {item.label && (
                       <p style={{
-                        color: 'rgba(255,255,255,0.6)',
+                        color: '#7C5CBF',
                         fontSize: 8,
                         margin: 0,
                         textAlign: 'center',
@@ -654,7 +567,7 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
                       </p>
                     )}
                     <p style={{
-                      color: 'white',
+                      color: '#3D2A6B',
                       fontWeight: 700,
                       fontSize: 11,
                       margin: 0,
@@ -669,8 +582,8 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
                     </p>
                     {itemPrice && (
                       <div style={{
-                        background: 'white',
-                        color: '#7C5CBF',
+                        background: '#7C5CBF',
+                        color: 'white',
                         fontWeight: 800,
                         fontSize: 11,
                         padding: '3px 10px',
@@ -690,12 +603,12 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
           {/* Footer */}
           <div style={{
             height: 30,
-            borderTop: '1px solid rgba(255,255,255,0.1)',
+            borderTop: '1px solid rgba(124,92,191,0.15)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             flexShrink: 0, zIndex: 1,
           }}>
             <p style={{
-              color: 'rgba(255,255,255,0.4)', fontSize: 10,
+              color: '#9B8AAF', fontSize: 10,
               margin: 0, letterSpacing: 0.5,
             }}>
               amapola.pulsowebstudio.com.ar
