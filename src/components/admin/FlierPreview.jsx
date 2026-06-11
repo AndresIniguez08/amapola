@@ -38,9 +38,6 @@ export default function FlierPreview({
 
   const filledComboItems = comboItems.filter((i) => i.product);
   const itemCount = filledComboItems.length;
-  const imageHeight = itemCount <= 2 ? 180 : 130;
-  const fontSize = itemCount <= 2 ? 14 : 11;
-  const priceSize = itemCount <= 2 ? 14 : 11;
   const mainImageSrc = resolvedImages["main"] ?? displayImage;
   const bgSrc = resolvedImages["background"];
 
@@ -135,7 +132,6 @@ export default function FlierPreview({
             gap: 16,
           }}
         >
-          {/* Imagen del producto */}
           <div
             style={{
               width: 200,
@@ -174,7 +170,6 @@ export default function FlierPreview({
             )}
           </div>
 
-          {/* Info del producto */}
           <div
             style={{
               background: "rgba(255,255,255,0.85)",
@@ -201,7 +196,6 @@ export default function FlierPreview({
             >
               {displayName}
             </p>
-
             <div
               style={{
                 width: 40,
@@ -210,7 +204,6 @@ export default function FlierPreview({
                 borderRadius: 2,
               }}
             />
-
             {adText && (
               <p
                 style={{
@@ -225,7 +218,6 @@ export default function FlierPreview({
                 {adText}
               </p>
             )}
-
             <div
               style={{
                 background: "#7C5CBF",
@@ -240,7 +232,6 @@ export default function FlierPreview({
             </div>
           </div>
 
-          {/* Footer */}
           <p
             style={{
               color: "#9B8AAF",
@@ -279,7 +270,6 @@ export default function FlierPreview({
             gap: 20,
           }}
         >
-          {/* Imagen del producto */}
           <div
             style={{
               width: 160,
@@ -318,7 +308,6 @@ export default function FlierPreview({
             )}
           </div>
 
-          {/* Panel info */}
           <div
             style={{
               flex: 1,
@@ -344,7 +333,6 @@ export default function FlierPreview({
             >
               {displayName}
             </p>
-
             <div
               style={{
                 width: 36,
@@ -353,7 +341,6 @@ export default function FlierPreview({
                 borderRadius: 2,
               }}
             />
-
             {adText && (
               <p
                 style={{
@@ -367,7 +354,6 @@ export default function FlierPreview({
                 {adText}
               </p>
             )}
-
             <div
               style={{
                 background: "#7C5CBF",
@@ -381,7 +367,6 @@ export default function FlierPreview({
             >
               {formatPrice(displayPrice)}
             </div>
-
             <p
               style={{
                 color: "#9B8AAF",
@@ -417,17 +402,16 @@ export default function FlierPreview({
             boxSizing: "border-box",
             overflow: "hidden",
             position: "relative",
-            gap: 12,
+            gap: 14,
           }}
         >
-          {/* Título */}
           <div
             style={{
-              background: "rgba(255,255,255,0.75)",
+              background: "rgba(255,255,255,0.82)",
               borderRadius: 50,
-              padding: "6px 24px",
+              padding: "8px 28px",
               zIndex: 1,
-              boxShadow: "0 2px 12px rgba(61,42,107,0.15)",
+              boxShadow: "0 2px 12px rgba(61,42,107,0.12)",
             }}
           >
             <p
@@ -444,7 +428,6 @@ export default function FlierPreview({
             </p>
           </div>
 
-          {/* Grid de productos */}
           <div
             style={{
               display: "grid",
@@ -453,6 +436,7 @@ export default function FlierPreview({
               zIndex: 1,
               width: "100%",
               flex: 1,
+              minHeight: 0,
             }}
           >
             {filledComboItems.map((item, index) => {
@@ -469,20 +453,20 @@ export default function FlierPreview({
                 <div
                   key={index}
                   style={{
-                    background: "rgba(255,255,255,0.75)",
-                    borderRadius: 14,
+                    background: "rgba(255,255,255,0.82)",
+                    borderRadius: 16,
                     overflow: "hidden",
                     display: "flex",
                     flexDirection: "column",
-                    alignItems: "center",
+                    boxShadow: "0 4px 16px rgba(61,42,107,0.1)",
                   }}
                 >
                   <div
                     style={{
                       width: "100%",
-                      height: imageHeight,
-                      overflow: "hidden",
+                      height: itemCount <= 2 ? 200 : 140,
                       flexShrink: 0,
+                      overflow: "hidden",
                     }}
                   >
                     {itemImage ? (
@@ -513,13 +497,12 @@ export default function FlierPreview({
                   </div>
                   <div
                     style={{
-                      padding: "8px",
+                      padding: "10px 12px",
                       display: "flex",
                       flexDirection: "column",
                       alignItems: "center",
-                      gap: 4,
-                      width: "100%",
-                      minHeight: 80,
+                      gap: 5,
+                      flex: 1,
                       justifyContent: "center",
                     }}
                   >
@@ -542,7 +525,7 @@ export default function FlierPreview({
                       style={{
                         color: "#2D1F4E",
                         fontWeight: 800,
-                        fontSize: fontSize,
+                        fontSize: itemCount <= 2 ? 15 : 12,
                         margin: 0,
                         textAlign: "center",
                         lineHeight: 1.2,
@@ -560,12 +543,11 @@ export default function FlierPreview({
                           background: "#7C5CBF",
                           color: "white",
                           fontWeight: 800,
-                          fontSize: priceSize,
-                          padding: "4px 12px",
+                          fontSize: itemCount <= 2 ? 15 : 12,
+                          padding: "5px 14px",
                           borderRadius: 50,
-                          marginTop: 2,
                           whiteSpace: "nowrap",
-                          boxShadow: "0 2px 8px rgba(61,42,107,0.3)",
+                          boxShadow: "0 2px 8px rgba(61,42,107,0.25)",
                         }}
                       >
                         ${Number(itemPrice).toLocaleString("es-AR")}
@@ -577,7 +559,6 @@ export default function FlierPreview({
             })}
           </div>
 
-          {/* Footer */}
           <p
             style={{
               color: "#9B8AAF",
@@ -611,26 +592,19 @@ export default function FlierPreview({
             boxSizing: "border-box",
             overflow: "hidden",
             position: "relative",
+            padding: "16px",
+            gap: 12,
           }}
         >
-          {/* Header */}
           <div
-            style={{
-              height: 50,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexShrink: 0,
-              zIndex: 1,
-              padding: "0 20px",
-            }}
+            style={{ display: "flex", justifyContent: "center", flexShrink: 0 }}
           >
             <div
               style={{
-                background: "rgba(255,255,255,0.75)",
+                background: "rgba(255,255,255,0.82)",
                 borderRadius: 50,
                 padding: "6px 24px",
-                boxShadow: "0 2px 12px rgba(61,42,107,0.15)",
+                boxShadow: "0 2px 12px rgba(61,42,107,0.12)",
               }}
             >
               <p
@@ -648,16 +622,14 @@ export default function FlierPreview({
             </div>
           </div>
 
-          {/* Body: grid de productos */}
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: `repeat(${filledComboItems.length}, 1fr)`,
-              flex: 1,
+              gridTemplateColumns: `repeat(${Math.min(filledComboItems.length, 4)}, 1fr)`,
               gap: 8,
-              padding: "8px 10px",
+              flex: 1,
+              minHeight: 0,
               overflow: "hidden",
-              zIndex: 1,
             }}
           >
             {filledComboItems.map((item, index) => {
@@ -674,20 +646,20 @@ export default function FlierPreview({
                 <div
                   key={index}
                   style={{
-                    background: "rgba(255,255,255,0.75)",
+                    background: "rgba(255,255,255,0.82)",
                     borderRadius: 12,
                     overflow: "hidden",
                     display: "flex",
                     flexDirection: "column",
-                    alignItems: "center",
+                    boxShadow: "0 4px 12px rgba(61,42,107,0.1)",
                   }}
                 >
                   <div
                     style={{
                       width: "100%",
                       flex: 1,
-                      overflow: "hidden",
                       minHeight: 0,
+                      overflow: "hidden",
                     }}
                   >
                     {itemImage ? (
@@ -718,14 +690,11 @@ export default function FlierPreview({
                   </div>
                   <div
                     style={{
-                      padding: "6px 8px",
+                      padding: "8px",
                       display: "flex",
                       flexDirection: "column",
                       alignItems: "center",
-                      gap: 3,
-                      width: "100%",
-                      minHeight: 70,
-                      justifyContent: "center",
+                      gap: 4,
                       flexShrink: 0,
                     }}
                   >
@@ -767,11 +736,10 @@ export default function FlierPreview({
                           color: "white",
                           fontWeight: 800,
                           fontSize: 11,
-                          padding: "3px 10px",
+                          padding: "4px 10px",
                           borderRadius: 50,
-                          marginTop: 2,
                           whiteSpace: "nowrap",
-                          boxShadow: "0 2px 8px rgba(61,42,107,0.3)",
+                          boxShadow: "0 2px 8px rgba(61,42,107,0.25)",
                         }}
                       >
                         ${Number(itemPrice).toLocaleString("es-AR")}
@@ -783,29 +751,19 @@ export default function FlierPreview({
             })}
           </div>
 
-          {/* Footer */}
-          <div
+          <p
             style={{
-              height: 30,
-              borderTop: "1px solid rgba(124,92,191,0.15)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexShrink: 0,
+              color: "#9B8AAF",
+              fontSize: 10,
+              margin: 0,
               zIndex: 1,
+              letterSpacing: 0.5,
+              textAlign: "center",
+              flexShrink: 0,
             }}
           >
-            <p
-              style={{
-                color: "#9B8AAF",
-                fontSize: 10,
-                margin: 0,
-                letterSpacing: 0.5,
-              }}
-            >
-              amapola.pulsowebstudio.com.ar
-            </p>
-          </div>
+            amapola.pulsowebstudio.com.ar
+          </p>
         </div>
       )}
     </div>
