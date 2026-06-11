@@ -48,7 +48,7 @@ function FieldError({ message }) {
 function SectionHeader({ number, title, subtitle }) {
   return (
     <div className="flex items-center gap-3 mb-5">
-      <div className="w-7 h-7 rounded-full bg-[#E8660A] text-white text-xs font-bold flex items-center justify-center flex-shrink-0">
+      <div className="w-7 h-7 rounded-full bg-[#7C5CBF] text-white text-xs font-bold flex items-center justify-center flex-shrink-0">
         {number}
       </div>
       <div>
@@ -75,7 +75,7 @@ const FloatingInput = forwardRef(function FloatingInput(
       <input
         ref={ref}
         placeholder={label}
-        className={`w-full ${Icon ? "pl-10" : "pl-4"} pr-4 py-3.5 text-sm bg-white border-2 rounded-xl text-stone-800 placeholder-stone-400 focus:outline-none focus:border-[#E8660A] transition-all duration-200 ${
+        className={`w-full ${Icon ? "pl-10" : "pl-4"} pr-4 py-3.5 text-sm bg-white border-2 rounded-xl text-stone-800 placeholder-stone-400 focus:outline-none focus:border-[#7C5CBF] transition-all duration-200 ${
           error
             ? "border-red-400 bg-red-50/30"
             : "border-stone-200 hover:border-stone-300"
@@ -193,7 +193,7 @@ export default function CheckoutForm() {
               {...register("notes")}
               placeholder="Observaciones (sin sal, sin TACC, etc.)"
               rows={3}
-              className="w-full pl-10 pr-4 py-3.5 text-sm bg-white border-2 border-stone-200 hover:border-stone-300 rounded-xl text-stone-800 placeholder-stone-400 focus:outline-none focus:border-[#E8660A] transition-all duration-200 resize-none"
+              className="w-full pl-10 pr-4 py-3.5 text-sm bg-white border-2 border-stone-200 hover:border-stone-300 rounded-xl text-stone-800 placeholder-stone-400 focus:outline-none focus:border-[#7C5CBF] transition-all duration-200 resize-none"
             />
           </div>
         </div>

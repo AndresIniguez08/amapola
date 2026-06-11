@@ -157,9 +157,9 @@ export default function ProductModal({ product, onClose }) {
                       key={variant.id}
                       type="button"
                       onClick={() => setSelectedVariant(variant)}
-                      className={`rounded-xl border-2 p-2 flex flex-col items-center gap-1 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#E8660A] ${
+                      className={`rounded-xl border-2 p-2 flex flex-col items-center gap-1 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#7C5CBF] ${
                         isSelected
-                          ? 'border-[#E8660A] bg-orange-50'
+                          ? 'border-[#7C5CBF] bg-[#F3EEFF]'
                           : 'border-stone-200 hover:border-stone-300 bg-white'
                       }`}
                     >
@@ -180,7 +180,7 @@ export default function ProductModal({ product, onClose }) {
                         {variant.name}
                       </span>
                       {showPrice && (
-                        <span className="text-xs font-bold text-[#E8660A]">
+                        <span className="text-xs font-bold text-[#7C5CBF]">
                           {formatPrice(variant.price)}
                         </span>
                       )}
@@ -203,7 +203,7 @@ export default function ProductModal({ product, onClose }) {
               <div className="flex items-center justify-center gap-4">
                 <button
                   onClick={handleDecrease}
-                  className="w-10 h-10 rounded-full bg-orange-50 text-[#E8660A] hover:bg-orange-100 flex items-center justify-center transition-colors"
+                  className="w-10 h-10 rounded-full bg-[#F3EEFF] text-[#7C5CBF] hover:bg-orange-100 flex items-center justify-center transition-colors"
                   aria-label="Reducir cantidad"
                 >
                   <Minus className="w-4 h-4" strokeWidth={2.5} />
@@ -213,7 +213,7 @@ export default function ProductModal({ product, onClose }) {
                 </span>
                 <button
                   onClick={handleIncrease}
-                  className="w-10 h-10 rounded-full bg-[#E8660A] text-white hover:bg-[#C25508] flex items-center justify-center transition-colors"
+                  className="w-10 h-10 rounded-full bg-[#7C5CBF] text-white hover:bg-[#5E3FA3] flex items-center justify-center transition-colors"
                   aria-label="Aumentar cantidad"
                 >
                   <Plus className="w-4 h-4" strokeWidth={2.5} />
@@ -225,7 +225,7 @@ export default function ProductModal({ product, onClose }) {
                 disabled={!canAdd}
                 className={`w-full flex items-center justify-center gap-2 py-3 rounded-xl font-semibold text-sm transition-all ${
                   canAdd
-                    ? 'bg-[#E8660A] text-white hover:bg-[#C25508]'
+                    ? 'bg-[#7C5CBF] text-white hover:bg-[#5E3FA3]'
                     : 'bg-stone-200 text-stone-400 cursor-not-allowed'
                 }`}
               >

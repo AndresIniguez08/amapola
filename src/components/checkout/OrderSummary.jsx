@@ -11,7 +11,7 @@ export default function OrderSummary({ deliveryFee = 0 }) {
       {/* Header */}
       <div className="flex items-center justify-between px-5 py-4 border-b border-stone-100">
         <div className="flex items-center gap-2">
-          <ShoppingBag className="w-4 h-4 text-[#E8660A]" strokeWidth={2} />
+          <ShoppingBag className="w-4 h-4 text-[#7C5CBF]" strokeWidth={2} />
           <h2 className="font-bold text-stone-800 text-sm">Tu pedido</h2>
         </div>
         <span className="text-xs text-stone-400 bg-stone-100 px-2 py-1 rounded-full">
@@ -42,7 +42,7 @@ export default function OrderSummary({ deliveryFee = 0 }) {
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-stone-800 truncate">{product.name}</p>
                 {variant && (
-                  <p className="text-xs text-[#E8660A] font-medium">{variant.name}</p>
+                  <p className="text-xs text-[#7C5CBF] font-medium">{variant.name}</p>
                 )}
                 <div className="flex items-center gap-1.5 mt-0.5">
                   <span className="text-xs text-stone-400">x{quantity}</span>
@@ -72,7 +72,7 @@ export default function OrderSummary({ deliveryFee = 0 }) {
         )}
         <div className="flex justify-between font-bold text-base text-stone-900 pt-1 border-t border-stone-200">
           <span>Total</span>
-          <span className="text-[#E8660A]">{formatPrice(total)}</span>
+          <span className="text-[#7C5CBF]">{formatPrice(total)}</span>
         </div>
       </div>
     </div>

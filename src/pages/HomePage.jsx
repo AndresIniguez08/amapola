@@ -12,7 +12,7 @@ const FEATURES = [
   { icon: Package, title: 'A domicilio', desc: 'Mercedes y alrededores' },
 ]
 
-const HERO_IMAGE = 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=1400&q=80&auto=format&fit=crop'
+const HERO_IMAGE = 'https://images.unsplash.com/photo-1556471013-0001958d2702?w=1400&q=80&auto=format&fit=crop'
 
 export default function HomePage() {
   const {
@@ -69,7 +69,7 @@ export default function HomePage() {
           <div className="flex flex-col sm:flex-row gap-3 mt-2">
             <button
               onClick={() => document.getElementById('catalogo')?.scrollIntoView({ behavior: 'smooth' })}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#E8660A] hover:bg-[#C25508] text-white font-semibold text-sm transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#7C5CBF] hover:bg-[#5E3FA3] text-white font-semibold text-sm transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
             >
               Ver productos
               <ArrowRight className="w-4 h-4" />
@@ -81,7 +81,7 @@ export default function HomePage() {
         {/* Wave decorativa abajo */}
         <div className="absolute bottom-0 left-0 right-0">
           <svg viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full">
-            <path d="M0 60L1440 60L1440 20C1200 60 960 0 720 20C480 40 240 0 0 20L0 60Z" fill="#FAFAF8"/>
+            <path d="M0 60L1440 60L1440 20C1200 60 960 0 720 20C480 40 240 0 0 20L0 60Z" fill="#FAF8F5"/>
           </svg>
         </div>
       </section>
@@ -94,8 +94,8 @@ export default function HomePage() {
               key={title}
               className="flex flex-col items-center text-center gap-2 p-4 bg-white rounded-2xl border border-stone-100 shadow-sm"
             >
-              <div className="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center">
-                <Icon className="w-5 h-5 text-[#E8660A]" strokeWidth={1.8} />
+              <div className="w-10 h-10 rounded-full bg-[#F3EEFF] flex items-center justify-center">
+                <Icon className="w-5 h-5 text-[#7C5CBF]" strokeWidth={1.8} />
               </div>
               <div>
                 <p className="font-semibold text-stone-800 text-xs sm:text-sm">{title}</p>

@@ -3,6 +3,19 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --color-primary:        #7C5CBF;
+    --color-primary-dark:   #5E3FA3;
+    --color-primary-light:  #F3EEFF;
+    --color-background:     #FAF8F5;
+    --color-surface:        #FFFFFF;
+    --color-border:         #E8E0F0;
+    --color-accent:         #C4A882;
+    --color-text-primary:   #2D2040;
+    --color-text-secondary: #6B5E7A;
+    --color-text-muted:     #9E8FAD;
+  }
+
   html {
     font-family: 'Plus Jakarta Sans', sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -11,8 +24,9 @@
   }
 
   body {
-    background-color: #FAFAF8;
-    color: #1C1917;
+    background-color: #FAF8F5;
+    color: #2D2040;
+    font-family: 'Plus Jakarta Sans', sans-serif;
   }
 
   * {

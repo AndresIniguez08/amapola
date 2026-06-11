@@ -82,7 +82,7 @@ export default function ProductCard({ product, onOpenModal }) {
       <div className="p-4 flex flex-col flex-1 gap-3">
         <div className="flex-1">
           <h3
-            className={`font-semibold text-text-primary text-sm leading-snug ${onOpenModal ? 'cursor-pointer hover:text-[#E8660A] transition-colors' : ''}`}
+            className={`font-semibold text-text-primary text-sm leading-snug ${onOpenModal ? 'cursor-pointer hover:text-[#7C5CBF] transition-colors' : ''}`}
             onClick={handleCardClick}
           >
             {product.name}

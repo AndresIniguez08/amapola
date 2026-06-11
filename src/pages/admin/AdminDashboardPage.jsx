@@ -71,7 +71,7 @@ function MetricCard({ label, value, accent }) {
     <div className="bg-white rounded-2xl border border-stone-100 shadow-sm p-5">
       <p className="text-xs text-stone-400 mb-1.5">{label}</p>
       <p
-        className={`text-2xl font-bold ${accent ? "text-yellow-600" : "text-[#E8660A]"}`}
+        className={`text-2xl font-bold ${accent ? "text-yellow-600" : "text-[#7C5CBF]"}`}
       >
         {value}
       </p>
@@ -207,7 +207,7 @@ export default function AdminDashboardPage() {
 
   const STATUS_BADGE = {
     pendiente: "bg-yellow-100 text-yellow-700",
-    confirmado: "bg-blue-100 text-blue-700",
+    confirmado: "bg-[#F3EEFF] text-[#7C5CBF]",
     entregado: "bg-green-100 text-green-700",
     cancelado: "bg-red-100 text-red-700",
   };
@@ -224,7 +224,7 @@ export default function AdminDashboardPage() {
                 onClick={() => setPeriod(p.key)}
                 className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${
                   period === p.key
-                    ? "bg-white text-[#E8660A] shadow-sm"
+                    ? "bg-white text-[#7C5CBF] shadow-sm"
                     : "text-stone-500 hover:text-stone-700"
                 }`}
               >
@@ -269,7 +269,7 @@ export default function AdminDashboardPage() {
                   <p className="text-xs text-stone-400 mb-1.5">
                     Ventas totales
                   </p>
-                  <p className="text-2xl font-bold text-[#E8660A]">
+                  <p className="text-2xl font-bold text-[#7C5CBF]">
                     {fmt(metrics.totalVentas)}
                   </p>
                 </div>
@@ -320,7 +320,7 @@ export default function AdminDashboardPage() {
                       width={40}
                     />
                     <Tooltip formatter={(v) => [fmt(v), "Ventas"]} />
-                    <Bar dataKey="total" fill="#E8660A" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="total" fill="#7C5CBF" radius={[4, 4, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
@@ -352,7 +352,7 @@ export default function AdminDashboardPage() {
                           <td className="py-2 text-right text-stone-500">
                             {p.qty}
                           </td>
-                          <td className="py-2 text-right font-semibold text-[#E8660A]">
+                          <td className="py-2 text-right font-semibold text-[#7C5CBF]">
                             {fmt(p.revenue)}
                           </td>
                         </tr>
@@ -410,7 +410,7 @@ export default function AdminDashboardPage() {
                           <td className="py-2 text-right font-semibold text-green-600">
                             {p.margin.toFixed(1)}%
                           </td>
-                          <td className="py-2 text-right font-semibold text-[#E8660A]">
+                          <td className="py-2 text-right font-semibold text-[#7C5CBF]">
                             {fmt(p.ganancia)}
                           </td>
                         </tr>
@@ -446,7 +446,7 @@ export default function AdminDashboardPage() {
                         </p>
                       </div>
                       <div className="flex items-center gap-2.5">
-                        <span className="font-semibold text-[#E8660A] text-sm">
+                        <span className="font-semibold text-[#7C5CBF] text-sm">
                           {fmt(o.total)}
                         </span>
                         <span

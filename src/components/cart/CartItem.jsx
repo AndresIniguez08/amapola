@@ -33,7 +33,7 @@ export default function CartItem({ item }) {
               {product.name}
             </p>
             {variant && (
-              <p className="text-xs text-[#E8660A] font-medium">{variant.name}</p>
+              <p className="text-xs text-[#7C5CBF] font-medium">{variant.name}</p>
             )}
           </div>
           <button

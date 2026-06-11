@@ -17,7 +17,7 @@ export default function Button({
   const variants = {
     primary: 'bg-primary text-white hover:bg-primary-dark active:scale-95',
     secondary:
-      'bg-primary-light text-primary hover:bg-orange-100 active:scale-95',
+      'bg-primary-light text-primary hover:bg-purple-100 active:scale-95',
     ghost:
       'bg-transparent text-text-secondary hover:bg-stone-100 active:scale-95',
     danger: 'bg-error text-white hover:bg-red-700 active:scale-95',

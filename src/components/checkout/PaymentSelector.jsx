@@ -29,17 +29,17 @@ export function PaymentMethodSelector({ value, onChange }) {
             onClick={() => onChange(v)}
             className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all duration-150 focus:outline-none ${
               selected
-                ? 'border-[#E8660A] bg-orange-50'
+                ? 'border-[#7C5CBF] bg-[#F3EEFF]'
                 : 'border-stone-200 bg-white hover:border-stone-300'
             }`}
           >
             <div className={`w-9 h-9 rounded-full flex items-center justify-center transition-colors ${
-              selected ? 'bg-[#E8660A]' : 'bg-stone-100'
+              selected ? 'bg-[#7C5CBF]' : 'bg-stone-100'
             }`}>
               <Icon className={`w-4 h-4 ${selected ? 'text-white' : 'text-stone-400'}`} strokeWidth={2} />
             </div>
             <span className={`text-xs font-semibold text-center leading-tight ${
-              selected ? 'text-[#E8660A]' : 'text-stone-500'
+              selected ? 'text-[#7C5CBF]' : 'text-stone-500'
             }`}>
               {label}
             </span>
@@ -62,17 +62,17 @@ export function DeliveryMethodSelector({ value, onChange, deliveryFee }) {
             onClick={() => onChange(v)}
             className={`w-full flex items-center gap-4 p-4 rounded-xl border-2 text-left transition-all duration-150 focus:outline-none ${
               selected
-                ? 'border-[#E8660A] bg-orange-50'
+                ? 'border-[#7C5CBF] bg-[#F3EEFF]'
                 : 'border-stone-200 bg-white hover:border-stone-300'
             }`}
           >
             <div className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${
-              selected ? 'bg-[#E8660A]' : 'bg-stone-100'
+              selected ? 'bg-[#7C5CBF]' : 'bg-stone-100'
             }`}>
               <Icon className={`w-4 h-4 ${selected ? 'text-white' : 'text-stone-400'}`} strokeWidth={2} />
             </div>
             <div className="flex-1">
-              <p className={`text-sm font-semibold ${selected ? 'text-[#E8660A]' : 'text-stone-700'}`}>
+              <p className={`text-sm font-semibold ${selected ? 'text-[#7C5CBF]' : 'text-stone-700'}`}>
                 {label}
               </p>
               <p className="text-xs text-stone-400">
@@ -82,9 +82,9 @@ export function DeliveryMethodSelector({ value, onChange, deliveryFee }) {
               </p>
             </div>
             <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${
-              selected ? 'border-[#E8660A]' : 'border-stone-300'
+              selected ? 'border-[#7C5CBF]' : 'border-stone-300'
             }`}>
-              {selected && <div className="w-2.5 h-2.5 rounded-full bg-[#E8660A]" />}
+              {selected && <div className="w-2.5 h-2.5 rounded-full bg-[#7C5CBF]" />}
             </div>
           </button>
         )
@@ -105,17 +105,17 @@ export function ScheduleSelector({ value, onChange }) {
             onClick={() => onChange(v)}
             className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all duration-150 focus:outline-none ${
               selected
-                ? 'border-[#E8660A] bg-orange-50'
+                ? 'border-[#7C5CBF] bg-[#F3EEFF]'
                 : 'border-stone-200 bg-white hover:border-stone-300'
             }`}
           >
             <div className={`w-9 h-9 rounded-full flex items-center justify-center transition-colors ${
-              selected ? 'bg-[#E8660A]' : 'bg-stone-100'
+              selected ? 'bg-[#7C5CBF]' : 'bg-stone-100'
             }`}>
               <Icon className={`w-4 h-4 ${selected ? 'text-white' : 'text-stone-400'}`} strokeWidth={2} />
             </div>
             <div className="text-center">
-              <p className={`text-xs font-semibold ${selected ? 'text-[#E8660A]' : 'text-stone-700'}`}>
+              <p className={`text-xs font-semibold ${selected ? 'text-[#7C5CBF]' : 'text-stone-700'}`}>
                 {label}
               </p>
               <p className="text-[10px] text-stone-400 mt-0.5">{description}</p>
