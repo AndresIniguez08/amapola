@@ -6,7 +6,7 @@ import CheckoutForm from "../components/checkout/CheckoutForm";
 import { useCatalogStore } from "../store/catalogStore";
 
 const CHECKOUT_IMAGE =
-  "https://images.unsplash.com/photo-1590080876124-e5e3c65b4e8a?w=1400&q=80&auto=format&fit=crop";
+  "https://images.unsplash.com/photo-1549931319-a545dcf3bc7c?w=1400&q=80&auto=format&fit=crop";
 const EMPTY_IMAGE =
   "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=1400&q=80&auto=format&fit=crop";
 
