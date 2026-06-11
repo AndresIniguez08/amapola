@@ -1,4 +1,4 @@
-export default function Logo({ className = '', size = 32 }) {
+export default function Logo({ className = '', size = 150 }) {
   return (
     <img
       src="/amapola-logo.png"

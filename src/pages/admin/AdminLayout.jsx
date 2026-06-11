@@ -26,8 +26,8 @@ export default function AdminLayout({ children }) {
       {/* Sidebar */}
       <aside className="hidden md:flex flex-col w-56 bg-surface border-r border-border p-4 gap-1 shrink-0">
         <div className="flex items-center gap-2 text-primary font-bold text-base px-3 py-2 mb-4">
-          <Logo size={22} />
-          <span>Amapola Admin</span>
+          <Logo size={150} />
+          
         </div>
         {NAV.map(({ to, label, icon: Icon }) => (
           <Link
