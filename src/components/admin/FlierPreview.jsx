@@ -114,90 +114,115 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            justifyContent: 'space-between',
-            padding: '28px 28px',
+            justifyContent: 'center',
+            padding: '32px 40px',
             fontFamily: "'Plus Jakarta Sans', sans-serif",
             boxSizing: 'border-box',
             overflow: 'hidden',
             position: 'relative',
+            gap: 0,
           }}
         >
-          {/* Imagen del producto */}
+          {/* Card central con imagen y datos del producto */}
           <div style={{
-            width: 260, height: 260,
-            borderRadius: 20,
+            background: 'rgba(255,255,255,0.82)',
+            borderRadius: 24,
             overflow: 'hidden',
-            boxShadow: '0 20px 60px rgba(0,0,0,0.4)',
-            zIndex: 1,
-            flexShrink: 0,
+            width: '100%',
+            maxWidth: 380,
+            boxShadow: '0 8px 40px rgba(61,42,107,0.18)',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
           }}>
-            {displayImage ? (
-              <div
-                style={{
+            {/* Imagen del producto */}
+            <div style={{
+              width: '100%',
+              height: 280,
+              overflow: 'hidden',
+              flexShrink: 0,
+            }}>
+              {displayImage ? (
+                <div style={{
                   width: '100%',
                   height: '100%',
                   backgroundImage: `url(${mainImageSrc})`,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
                   backgroundRepeat: 'no-repeat',
-                }}
-              />
-            ) : (
-              <div style={{
-                width: '100%', height: '100%',
-                background: 'rgba(255,255,255,0.1)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-              }}>
-                <span style={{ fontSize: 40 }}>🍞</span>
-              </div>
-            )}
-          </div>
+                }} />
+              ) : (
+                <div style={{
+                  width: '100%', height: '100%',
+                  background: '#F3EEFF',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                  <span style={{ fontSize: 48 }}>🍞</span>
+                </div>
+              )}
+            </div>
 
-          {/* Info */}
-          <div style={{
-            display: 'flex', flexDirection: 'column',
-            alignItems: 'center', gap: 8, zIndex: 1, width: '100%',
-          }}>
-            <p style={{
-              color: '#3D2A6B', fontWeight: 800, fontSize: 20,
-              textAlign: 'center', margin: 0, lineHeight: 1.2,
-            }}>
-              {displayName}
-            </p>
-
+            {/* Info dentro de la card */}
             <div style={{
-              width: 60, height: 2,
-              background: '#7C5CBF',
-              borderRadius: 2,
-            }} />
-
-            {adText && (
+              padding: '20px 24px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: 10,
+              width: '100%',
+              boxSizing: 'border-box',
+            }}>
               <p style={{
-                color: '#5E3FA3', fontSize: 13,
-                textAlign: 'center', margin: 0, fontStyle: 'italic',
-                lineHeight: 1.4, maxWidth: 380,
+                color: '#3D2A6B',
+                fontWeight: 800,
+                fontSize: 22,
+                textAlign: 'center',
+                margin: 0,
+                lineHeight: 1.2,
               }}>
-                {adText}
+                {displayName}
               </p>
-            )}
 
-            <div style={{
-              background: 'white',
-              color: '#7C5CBF',
-              fontWeight: 800,
-              fontSize: 20,
-              padding: '8px 28px',
-              borderRadius: 50,
-              marginTop: 4,
-            }}>
-              {formatPrice(displayPrice)}
+              <div style={{
+                width: 50, height: 2,
+                background: '#7C5CBF',
+                borderRadius: 2,
+              }} />
+
+              {adText && (
+                <p style={{
+                  color: '#5E3FA3',
+                  fontSize: 13,
+                  textAlign: 'center',
+                  margin: 0,
+                  fontStyle: 'italic',
+                  lineHeight: 1.4,
+                }}>
+                  {adText}
+                </p>
+              )}
+
+              <div style={{
+                background: '#7C5CBF',
+                color: 'white',
+                fontWeight: 800,
+                fontSize: 22,
+                padding: '10px 32px',
+                borderRadius: 50,
+                marginTop: 4,
+              }}>
+                {formatPrice(displayPrice)}
+              </div>
             </div>
           </div>
 
-          {/* Footer */}
+          {/* Footer fuera de la card */}
           <p style={{
-            color: '#9B8AAF', fontSize: 11,
-            margin: 0, zIndex: 1, letterSpacing: 0.5,
+            color: '#9B8AAF',
+            fontSize: 11,
+            margin: '14px 0 0 0',
+            zIndex: 1,
+            letterSpacing: 0.5,
           }}>
             amapola.pulsowebstudio.com.ar
           </p>
@@ -216,93 +241,105 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
             display: 'flex',
-            flexDirection: 'column',
             fontFamily: "'Plus Jakarta Sans', sans-serif",
             boxSizing: 'border-box',
             overflow: 'hidden',
             position: 'relative',
+            padding: 20,
+            gap: 16,
+            alignItems: 'center',
           }}
         >
-          {/* Header sin logo — incluido en la imagen de fondo */}
+          {/* Imagen del producto — izquierda */}
           <div style={{
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            padding: '10px 20px',
-            borderBottom: '1px solid rgba(124,92,191,0.15)',
-          }} />
-
-          {/* Body */}
-          <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
-            {/* Imagen */}
-            <div style={{ width: 200, height: '100%', overflow: 'hidden', flexShrink: 0 }}>
-              {displayImage ? (
-                <div
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    backgroundImage: `url(${mainImageSrc})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    backgroundRepeat: 'no-repeat',
-                  }}
-                />
-              ) : (
-                <div style={{
-                  width: '100%', height: '100%',
-                  background: 'rgba(255,255,255,0.1)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                }}>
-                  <span style={{ fontSize: 40 }}>🍞</span>
-                </div>
-              )}
-            </div>
-
-            {/* Texto */}
-            <div style={{
-              flex: 1, padding: '20px',
-              display: 'flex', flexDirection: 'column',
-              justifyContent: 'center', gap: 10,
-            }}>
-              <p style={{
-                color: '#3D2A6B', fontWeight: 800, fontSize: 18,
-                margin: 0, lineHeight: 1.2,
-              }}>
-                {displayName}
-              </p>
-
-              {adText && (
-                <p style={{
-                  color: '#5E3FA3', fontSize: 12,
-                  margin: 0, fontStyle: 'italic', lineHeight: 1.4,
-                }}>
-                  {adText}
-                </p>
-              )}
-
+            width: 220,
+            height: 320,
+            borderRadius: 20,
+            overflow: 'hidden',
+            flexShrink: 0,
+            boxShadow: '0 8px 32px rgba(61,42,107,0.2)',
+          }}>
+            {displayImage ? (
               <div style={{
-                background: 'white',
-                color: '#7C5CBF',
-                fontWeight: 800,
-                fontSize: 18,
-                padding: '6px 20px',
-                borderRadius: 50,
-                display: 'inline-block',
-                alignSelf: 'flex-start',
-                marginTop: 4,
+                width: '100%',
+                height: '100%',
+                backgroundImage: `url(${mainImageSrc})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+              }} />
+            ) : (
+              <div style={{
+                width: '100%', height: '100%',
+                background: '#F3EEFF',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}>
-                {formatPrice(displayPrice)}
+                <span style={{ fontSize: 40 }}>🍞</span>
               </div>
-            </div>
+            )}
           </div>
 
-          {/* Footer */}
+          {/* Panel info — derecha */}
           <div style={{
-            padding: '10px 20px',
-            borderTop: '1px solid rgba(124,92,191,0.15)',
-            textAlign: 'center',
+            flex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            gap: 12,
+            background: 'rgba(255,255,255,0.80)',
+            borderRadius: 20,
+            padding: '24px 20px',
+            height: 320,
+            boxSizing: 'border-box',
+            boxShadow: '0 4px 24px rgba(61,42,107,0.1)',
           }}>
             <p style={{
-              color: '#9B8AAF', fontSize: 10,
-              margin: 0, letterSpacing: 0.5,
+              color: '#3D2A6B',
+              fontWeight: 800,
+              fontSize: 20,
+              margin: 0,
+              lineHeight: 1.2,
+            }}>
+              {displayName}
+            </p>
+
+            <div style={{
+              width: 40, height: 2,
+              background: '#7C5CBF',
+              borderRadius: 2,
+            }} />
+
+            {adText && (
+              <p style={{
+                color: '#5E3FA3',
+                fontSize: 12,
+                margin: 0,
+                fontStyle: 'italic',
+                lineHeight: 1.5,
+              }}>
+                {adText}
+              </p>
+            )}
+
+            <div style={{
+              background: '#7C5CBF',
+              color: 'white',
+              fontWeight: 800,
+              fontSize: 20,
+              padding: '10px 20px',
+              borderRadius: 50,
+              display: 'inline-block',
+              alignSelf: 'flex-start',
+              marginTop: 4,
+            }}>
+              {formatPrice(displayPrice)}
+            </div>
+
+            <p style={{
+              color: '#9B8AAF',
+              fontSize: 10,
+              margin: '8px 0 0 0',
+              letterSpacing: 0.5,
             }}>
               amapola.pulsowebstudio.com.ar
             </p>
@@ -334,10 +371,11 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
         >
           {/* Título */}
           <div style={{
-            background: 'rgba(124,92,191,0.15)',
+            background: 'rgba(255,255,255,0.75)',
             borderRadius: 50,
             padding: '6px 24px',
             zIndex: 1,
+            boxShadow: '0 2px 12px rgba(61,42,107,0.15)',
           }}>
             <p style={{
               color: '#3D2A6B', fontWeight: 800, fontSize: 18,
@@ -405,8 +443,8 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
                   }}>
                     {item.label && (
                       <p style={{
-                        color: '#7C5CBF',
-                        fontSize: 9,
+                        color: '#5E3FA3',
+                        fontSize: 10,
                         margin: 0,
                         textAlign: 'center',
                         fontWeight: 700,
@@ -417,8 +455,8 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
                       </p>
                     )}
                     <p style={{
-                      color: '#3D2A6B',
-                      fontWeight: 700,
+                      color: '#2D1F4E',
+                      fontWeight: 800,
                       fontSize: fontSize,
                       margin: 0,
                       textAlign: 'center',
@@ -440,6 +478,7 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
                         borderRadius: 50,
                         marginTop: 2,
                         whiteSpace: 'nowrap',
+                        boxShadow: '0 2px 8px rgba(61,42,107,0.3)',
                       }}>
                         ${Number(itemPrice).toLocaleString('es-AR')}
                       </div>
@@ -479,7 +518,7 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
             position: 'relative',
           }}
         >
-          {/* Header: solo título — logo incluido en el fondo */}
+          {/* Header: título con pill blanco */}
           <div style={{
             height: 50,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -487,12 +526,18 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
             flexShrink: 0,
             zIndex: 1,
           }}>
-            <p style={{
-              color: '#3D2A6B', fontWeight: 800, fontSize: 14,
-              margin: 0, letterSpacing: 2, textTransform: 'uppercase',
+            <div style={{
+              background: 'rgba(255,255,255,0.75)',
+              padding: '8px 20px',
+              borderRadius: 50,
             }}>
-              {adText || 'Ofertas'}
-            </p>
+              <p style={{
+                color: '#3D2A6B', fontWeight: 800, fontSize: 14,
+                margin: 0, letterSpacing: 2, textTransform: 'uppercase',
+              }}>
+                {adText || 'Ofertas'}
+              </p>
+            </div>
           </div>
 
           {/* Body: grid de productos */}
@@ -511,7 +556,7 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
               const itemPrice = item.price || (item.variant?.price ?? item.product?.price)
               return (
                 <div key={index} style={{
-                  background: 'rgba(124,92,191,0.12)',
+                  background: 'rgba(255,255,255,0.75)',
                   borderRadius: 12,
                   overflow: 'hidden',
                   display: 'flex',
@@ -555,7 +600,7 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
                   }}>
                     {item.label && (
                       <p style={{
-                        color: '#7C5CBF',
+                        color: '#5E3FA3',
                         fontSize: 8,
                         margin: 0,
                         textAlign: 'center',
@@ -567,7 +612,7 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
                       </p>
                     )}
                     <p style={{
-                      color: '#3D2A6B',
+                      color: '#2D1F4E',
                       fontWeight: 700,
                       fontSize: 11,
                       margin: 0,
