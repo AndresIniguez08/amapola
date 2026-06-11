@@ -29,6 +29,10 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
     : product?.name
 
   const filledComboItems = comboItems.filter(i => i.product)
+  const itemCount = filledComboItems.length
+  const imageHeight = itemCount <= 2 ? 180 : 130
+  const fontSize = itemCount <= 2 ? 14 : 11
+  const priceSize = itemCount <= 2 ? 14 : 11
   const mainImageSrc = resolvedImages['main'] ?? displayImage
   const logoSrc = resolvedImages['logo'] ?? '/amapola-logo.png'
 
@@ -422,93 +426,98 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
             width: '100%',
             flex: 1,
           }}>
-            {filledComboItems.map((item, index) => (
-              <div key={index} style={{
-                background: 'rgba(255,255,255,0.1)',
-                borderRadius: 14,
-                overflow: 'hidden',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-              }}>
-                {/* Imagen */}
-                <div style={{ width: '100%', height: 120, overflow: 'hidden', flexShrink: 0 }}>
-                  {item.product.image_url ? (
-                    <div
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        backgroundImage: `url(${resolvedImages['combo_' + index] ?? item.product.image_url})`,
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                        backgroundRepeat: 'no-repeat',
-                      }}
-                    />
-                  ) : (
-                    <div style={{
-                      width: '100%', height: '100%',
-                      background: 'rgba(255,255,255,0.1)',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    }}>
-                      <span style={{ fontSize: 28 }}>🍞</span>
-                    </div>
-                  )}
-                </div>
-                {/* Info */}
-                <div style={{
-                  padding: '8px',
+            {filledComboItems.map((item, index) => {
+              const itemImage = resolvedImages['combo_' + index] ?? item.variant?.image_url ?? item.product?.image_url
+              const itemName = item.variant ? `${item.product.name} — ${item.variant.name}` : item.product.name
+              const itemPrice = item.price || (item.variant?.price ?? item.product?.price)
+              return (
+                <div key={index} style={{
+                  background: 'rgba(255,255,255,0.1)',
+                  borderRadius: 14,
+                  overflow: 'hidden',
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
-                  gap: 4,
-                  width: '100%',
-                  minHeight: 80,
-                  justifyContent: 'center',
                 }}>
-                  {item.label && (
+                  {/* Imagen */}
+                  <div style={{ width: '100%', height: imageHeight, overflow: 'hidden', flexShrink: 0 }}>
+                    {itemImage ? (
+                      <div
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          backgroundImage: `url(${itemImage})`,
+                          backgroundSize: 'cover',
+                          backgroundPosition: 'center',
+                          backgroundRepeat: 'no-repeat',
+                        }}
+                      />
+                    ) : (
+                      <div style={{
+                        width: '100%', height: '100%',
+                        background: 'rgba(255,255,255,0.1)',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      }}>
+                        <span style={{ fontSize: 28 }}>🍞</span>
+                      </div>
+                    )}
+                  </div>
+                  {/* Info */}
+                  <div style={{
+                    padding: '8px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: 4,
+                    width: '100%',
+                    minHeight: 80,
+                    justifyContent: 'center',
+                  }}>
+                    {item.label && (
+                      <p style={{
+                        color: 'rgba(255,255,255,0.6)',
+                        fontSize: 9,
+                        margin: 0,
+                        textAlign: 'center',
+                        fontWeight: 700,
+                        textTransform: 'uppercase',
+                        letterSpacing: 0.5,
+                      }}>
+                        {item.label}
+                      </p>
+                    )}
                     <p style={{
-                      color: 'rgba(255,255,255,0.6)',
-                      fontSize: 9,
+                      color: 'white',
+                      fontWeight: 700,
+                      fontSize: fontSize,
                       margin: 0,
                       textAlign: 'center',
-                      fontWeight: 700,
-                      textTransform: 'uppercase',
-                      letterSpacing: 0.5,
-                    }}>
-                      {item.label}
-                    </p>
-                  )}
-                  <p style={{
-                    color: 'white',
-                    fontWeight: 700,
-                    fontSize: 12,
-                    margin: 0,
-                    textAlign: 'center',
-                    lineHeight: 1.2,
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
-                    maxWidth: '100%',
-                  }}>
-                    {item.product.name}
-                  </p>
-                  {item.price && (
-                    <div style={{
-                      background: 'white',
-                      color: '#7C5CBF',
-                      fontWeight: 800,
-                      fontSize: 12,
-                      padding: '4px 12px',
-                      borderRadius: 50,
-                      marginTop: 2,
+                      lineHeight: 1.2,
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
                       whiteSpace: 'nowrap',
+                      maxWidth: '100%',
                     }}>
-                      ${Number(item.price).toLocaleString('es-AR')}
-                    </div>
-                  )}
+                      {itemName}
+                    </p>
+                    {itemPrice && (
+                      <div style={{
+                        background: 'white',
+                        color: '#7C5CBF',
+                        fontWeight: 800,
+                        fontSize: priceSize,
+                        padding: '4px 12px',
+                        borderRadius: 50,
+                        marginTop: 2,
+                        whiteSpace: 'nowrap',
+                      }}>
+                        ${Number(itemPrice).toLocaleString('es-AR')}
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
 
           {/* Footer */}
@@ -583,94 +592,99 @@ export default function FlierPreview({ product, adText, format, flierRef, templa
             overflow: 'hidden',
             zIndex: 1,
           }}>
-            {filledComboItems.map((item, index) => (
-              <div key={index} style={{
-                background: 'rgba(255,255,255,0.1)',
-                borderRadius: 12,
-                overflow: 'hidden',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-              }}>
-                {/* Imagen */}
-                <div style={{ width: '100%', flex: 1, overflow: 'hidden', minHeight: 0 }}>
-                  {item.product.image_url ? (
-                    <div
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        backgroundImage: `url(${resolvedImages['combo_' + index] ?? item.product.image_url})`,
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                        backgroundRepeat: 'no-repeat',
-                      }}
-                    />
-                  ) : (
-                    <div style={{
-                      width: '100%', height: '100%',
-                      background: 'rgba(255,255,255,0.1)',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    }}>
-                      <span style={{ fontSize: 24 }}>🍞</span>
-                    </div>
-                  )}
-                </div>
-                {/* Info */}
-                <div style={{
-                  padding: '6px 8px',
+            {filledComboItems.map((item, index) => {
+              const itemImage = resolvedImages['combo_' + index] ?? item.variant?.image_url ?? item.product?.image_url
+              const itemName = item.variant ? `${item.product.name} — ${item.variant.name}` : item.product.name
+              const itemPrice = item.price || (item.variant?.price ?? item.product?.price)
+              return (
+                <div key={index} style={{
+                  background: 'rgba(255,255,255,0.1)',
+                  borderRadius: 12,
+                  overflow: 'hidden',
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
-                  gap: 3,
-                  width: '100%',
-                  minHeight: 70,
-                  justifyContent: 'center',
-                  flexShrink: 0,
                 }}>
-                  {item.label && (
+                  {/* Imagen */}
+                  <div style={{ width: '100%', flex: 1, overflow: 'hidden', minHeight: 0 }}>
+                    {itemImage ? (
+                      <div
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          backgroundImage: `url(${itemImage})`,
+                          backgroundSize: 'cover',
+                          backgroundPosition: 'center',
+                          backgroundRepeat: 'no-repeat',
+                        }}
+                      />
+                    ) : (
+                      <div style={{
+                        width: '100%', height: '100%',
+                        background: 'rgba(255,255,255,0.1)',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      }}>
+                        <span style={{ fontSize: 24 }}>🍞</span>
+                      </div>
+                    )}
+                  </div>
+                  {/* Info */}
+                  <div style={{
+                    padding: '6px 8px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: 3,
+                    width: '100%',
+                    minHeight: 70,
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                  }}>
+                    {item.label && (
+                      <p style={{
+                        color: 'rgba(255,255,255,0.6)',
+                        fontSize: 8,
+                        margin: 0,
+                        textAlign: 'center',
+                        fontWeight: 700,
+                        textTransform: 'uppercase',
+                        letterSpacing: 0.5,
+                      }}>
+                        {item.label}
+                      </p>
+                    )}
                     <p style={{
-                      color: 'rgba(255,255,255,0.6)',
-                      fontSize: 8,
+                      color: 'white',
+                      fontWeight: 700,
+                      fontSize: 11,
                       margin: 0,
                       textAlign: 'center',
-                      fontWeight: 700,
-                      textTransform: 'uppercase',
-                      letterSpacing: 0.5,
-                    }}>
-                      {item.label}
-                    </p>
-                  )}
-                  <p style={{
-                    color: 'white',
-                    fontWeight: 700,
-                    fontSize: 11,
-                    margin: 0,
-                    textAlign: 'center',
-                    lineHeight: 1.2,
-                    maxWidth: '100%',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
-                  }}>
-                    {item.product.name}
-                  </p>
-                  {item.price && (
-                    <div style={{
-                      background: 'white',
-                      color: '#7C5CBF',
-                      fontWeight: 800,
-                      fontSize: 11,
-                      padding: '3px 10px',
-                      borderRadius: 50,
-                      marginTop: 2,
+                      lineHeight: 1.2,
+                      maxWidth: '100%',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
                       whiteSpace: 'nowrap',
                     }}>
-                      ${Number(item.price).toLocaleString('es-AR')}
-                    </div>
-                  )}
+                      {itemName}
+                    </p>
+                    {itemPrice && (
+                      <div style={{
+                        background: 'white',
+                        color: '#7C5CBF',
+                        fontWeight: 800,
+                        fontSize: 11,
+                        padding: '3px 10px',
+                        borderRadius: 50,
+                        marginTop: 2,
+                        whiteSpace: 'nowrap',
+                      }}>
+                        ${Number(itemPrice).toLocaleString('es-AR')}
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
 
           {/* Footer */}

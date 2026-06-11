@@ -10,21 +10,46 @@ import toast from 'react-hot-toast'
 import { urlToBase64 } from '../../lib/imageUtils'
 
 function ComboSelector({ products, comboItems, onChange }) {
-  function updateItem(index, field, value) {
-    const updated = comboItems.map((item, i) => {
-      if (i !== index) return item
-      if (field === 'product') {
-        const found = products.find(p => p.id === value)
-        return { ...item, product: found ?? null, label: found?.name ?? '' }
+  async function updateItem(index, field, value) {
+    const updated = [...comboItems]
+
+    if (field === 'product') {
+      const found = products.find(p => p.id === value)
+      let variants = []
+      if (found) {
+        const { data } = await supabase
+          .from('variants')
+          .select('*')
+          .eq('product_id', found.id)
+          .eq('is_active', true)
+          .order('position')
+        variants = data ?? []
       }
-      return { ...item, [field]: value }
-    })
+      updated[index] = {
+        ...updated[index],
+        product: found ?? null,
+        label: found?.name ?? '',
+        price: found?.price ? String(found.price) : '',
+        variant: null,
+        variants,
+      }
+    } else if (field === 'variant') {
+      const found = updated[index].variants.find(v => v.id === value)
+      updated[index] = {
+        ...updated[index],
+        variant: found ?? null,
+        price: found?.price ? String(found.price) : String(updated[index].product?.price ?? ''),
+      }
+    } else {
+      updated[index] = { ...updated[index], [field]: value }
+    }
+
     onChange(updated)
   }
 
   function addItem() {
     if (comboItems.length >= 4) return
-    onChange([...comboItems, { product: null, label: '', price: '' }])
+    onChange([...comboItems, { product: null, label: '', price: '', variant: null, variants: [] }])
   }
 
   function removeItem(index) {
@@ -62,6 +87,20 @@ function ComboSelector({ products, comboItems, onChange }) {
               <option key={p.id} value={p.id}>{p.name}</option>
             ))}
           </select>
+          {item.variants?.length > 0 && (
+            <select
+              className="w-full border border-border rounded-btn px-3 py-1.5 text-xs bg-surface text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
+              value={item.variant?.id ?? ''}
+              onChange={e => updateItem(index, 'variant', e.target.value)}
+            >
+              <option value="">— Sin variante —</option>
+              {item.variants.map(v => (
+                <option key={v.id} value={v.id}>
+                  {v.name}{v.price ? ` — $${Number(v.price).toLocaleString('es-AR')}` : ''}
+                </option>
+              ))}
+            </select>
+          )}
           <div className="grid grid-cols-2 gap-2">
             <input
               className="border border-border rounded-btn px-3 py-1.5 text-xs bg-surface text-text-primary focus:outline-none"
@@ -99,8 +138,8 @@ export default function AdminAdsPage() {
   const [format, setFormat] = useState('instagram')
   const [templateType, setTemplateType] = useState('producto')
   const [comboItems, setComboItems] = useState([
-    { product: null, label: '', price: '' },
-    { product: null, label: '', price: '' },
+    { product: null, label: '', price: '', variant: null, variants: [] },
+    { product: null, label: '', price: '', variant: null, variants: [] },
   ])
   const [downloading, setDownloading] = useState(false)
   const [resolvedImages, setResolvedImages] = useState({})
@@ -132,8 +171,9 @@ export default function AdminAdsPage() {
     if (templateType === 'combo') {
       const filled = comboItems.filter(i => i.product)
       for (let i = 0; i < filled.length; i++) {
-        if (filled[i].product?.image_url) {
-          urls['combo_' + i] = await urlToBase64(filled[i].product.image_url)
+        const imageUrl = filled[i].variant?.image_url ?? filled[i].product?.image_url
+        if (imageUrl) {
+          urls['combo_' + i] = await urlToBase64(imageUrl)
         }
       }
     }
