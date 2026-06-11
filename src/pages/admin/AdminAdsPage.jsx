@@ -7,12 +7,99 @@ import FlierPreview from '../../components/admin/FlierPreview'
 import Button from '../../components/ui/Button'
 import Spinner from '../../components/ui/Spinner'
 
+function ComboSelector({ products, comboItems, onChange }) {
+  function updateItem(index, field, value) {
+    const updated = comboItems.map((item, i) => {
+      if (i !== index) return item
+      if (field === 'product') {
+        const found = products.find(p => p.id === value)
+        return { ...item, product: found ?? null, label: found?.name ?? '' }
+      }
+      return { ...item, [field]: value }
+    })
+    onChange(updated)
+  }
+
+  function addItem() {
+    if (comboItems.length >= 4) return
+    onChange([...comboItems, { product: null, label: '', price: '' }])
+  }
+
+  function removeItem(index) {
+    if (comboItems.length <= 2) return
+    onChange(comboItems.filter((_, i) => i !== index))
+  }
+
+  return (
+    <div className="flex flex-col gap-3">
+      <label className="text-sm font-medium text-text-primary">
+        Productos del combo (máx. 4)
+      </label>
+      {comboItems.map((item, index) => (
+        <div key={index} className="flex flex-col gap-1.5 p-3 bg-stone-50 rounded-xl border border-stone-200">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-stone-500">
+              Producto {index + 1}
+            </span>
+            {comboItems.length > 2 && (
+              <button
+                onClick={() => removeItem(index)}
+                className="text-xs text-red-400 hover:text-red-600"
+              >
+                Quitar
+              </button>
+            )}
+          </div>
+          <select
+            className="w-full border border-border rounded-btn px-3 py-2 text-xs bg-surface text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
+            value={item.product?.id ?? ''}
+            onChange={e => updateItem(index, 'product', e.target.value)}
+          >
+            <option value="">— Seleccioná —</option>
+            {products.map(p => (
+              <option key={p.id} value={p.id}>{p.name}</option>
+            ))}
+          </select>
+          <div className="grid grid-cols-2 gap-2">
+            <input
+              className="border border-border rounded-btn px-3 py-1.5 text-xs bg-surface text-text-primary focus:outline-none"
+              placeholder="Etiqueta (ej: x6 unid)"
+              value={item.label}
+              onChange={e => updateItem(index, 'label', e.target.value)}
+            />
+            <input
+              className="border border-border rounded-btn px-3 py-1.5 text-xs bg-surface text-text-primary focus:outline-none"
+              placeholder="Precio (ej: 8000)"
+              type="number"
+              value={item.price}
+              onChange={e => updateItem(index, 'price', e.target.value)}
+            />
+          </div>
+        </div>
+      ))}
+      {comboItems.length < 4 && (
+        <button
+          onClick={addItem}
+          className="text-xs text-[#7C5CBF] font-semibold hover:underline text-left"
+        >
+          + Agregar producto
+        </button>
+      )}
+    </div>
+  )
+}
+
 export default function AdminAdsPage() {
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
   const [selectedProduct, setSelectedProduct] = useState(null)
   const [adText, setAdText] = useState('')
   const [format, setFormat] = useState('instagram')
+  const [templateType, setTemplateType] = useState('producto')
+  const [comboItems, setComboItems] = useState([
+    { product: null, label: '', price: '' },
+    { product: null, label: '', price: '' },
+  ])
   const [downloading, setDownloading] = useState(false)
   const flierRef = useRef(null)
 
@@ -28,8 +115,16 @@ export default function AdminAdsPage() {
     fetchProducts()
   }, [])
 
+  const isDownloadDisabled = downloading || (
+    templateType === 'producto'
+      ? !selectedProduct
+      : comboItems.filter(i => i.product).length === 0
+  )
+
   async function handleDownload() {
-    if (!flierRef.current || !selectedProduct) return
+    if (!flierRef.current) return
+    if (templateType === 'producto' && !selectedProduct) return
+    if (templateType === 'combo' && comboItems.filter(i => i.product).length === 0) return
     setDownloading(true)
     try {
       const element = flierRef.current
@@ -45,7 +140,9 @@ export default function AdminAdsPage() {
         windowHeight: element.offsetHeight,
       })
       const link = document.createElement('a')
-      link.download = `amapola-${selectedProduct.name.toLowerCase().replace(/\s+/g, '-')}-${format}.png`
+      link.download = templateType === 'combo'
+        ? `amapola-combo-${format}.png`
+        : `amapola-${selectedProduct.name.toLowerCase().replace(/\s+/g, '-')}-${format}.png`
       link.href = canvas.toDataURL('image/png')
       link.click()
     } catch (err) {
@@ -63,29 +160,60 @@ export default function AdminAdsPage() {
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Panel de configuración */}
           <div className="flex flex-col gap-5 w-full lg:w-72 shrink-0">
-            {/* Selector de producto */}
+            {/* Selector de template */}
             <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium text-text-primary">Producto</label>
-              {loading ? (
-                <div className="flex items-center gap-2 text-text-muted text-sm">
-                  <Spinner size="sm" /> Cargando...
-                </div>
-              ) : (
-                <select
-                  className="w-full border border-border rounded-btn px-3 py-2 text-sm bg-surface text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
-                  value={selectedProduct?.id ?? ''}
-                  onChange={e => {
-                    const found = products.find(p => p.id === e.target.value)
-                    setSelectedProduct(found ?? null)
-                  }}
-                >
-                  <option value="">— Seleccioná un producto —</option>
-                  {products.map(p => (
-                    <option key={p.id} value={p.id}>{p.name}</option>
-                  ))}
-                </select>
-              )}
+              <label className="text-sm font-medium text-text-primary">Template</label>
+              <div className="flex gap-2">
+                {[
+                  { value: 'producto', label: 'Producto' },
+                  { value: 'combo', label: 'Combo/Oferta' },
+                ].map(opt => (
+                  <button
+                    key={opt.value}
+                    onClick={() => setTemplateType(opt.value)}
+                    className={`flex-1 py-2 px-3 text-xs font-medium rounded-btn border transition-colors ${
+                      templateType === opt.value
+                        ? 'bg-primary text-white border-primary'
+                        : 'bg-surface text-text-secondary border-border hover:border-primary/50'
+                    }`}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
             </div>
+
+            {/* Selector de producto o combo */}
+            {templateType === 'producto' ? (
+              <div className="flex flex-col gap-1.5">
+                <label className="text-sm font-medium text-text-primary">Producto</label>
+                {loading ? (
+                  <div className="flex items-center gap-2 text-text-muted text-sm">
+                    <Spinner size="sm" /> Cargando...
+                  </div>
+                ) : (
+                  <select
+                    className="w-full border border-border rounded-btn px-3 py-2 text-sm bg-surface text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
+                    value={selectedProduct?.id ?? ''}
+                    onChange={e => {
+                      const found = products.find(p => p.id === e.target.value)
+                      setSelectedProduct(found ?? null)
+                    }}
+                  >
+                    <option value="">— Seleccioná un producto —</option>
+                    {products.map(p => (
+                      <option key={p.id} value={p.id}>{p.name}</option>
+                    ))}
+                  </select>
+                )}
+              </div>
+            ) : (
+              <ComboSelector
+                products={products}
+                comboItems={comboItems}
+                onChange={setComboItems}
+              />
+            )}
 
             {/* Formato */}
             <div className="flex flex-col gap-1.5">
@@ -113,12 +241,15 @@ export default function AdminAdsPage() {
             {/* Texto del anuncio */}
             <div className="flex flex-col gap-1.5">
               <label className="text-sm font-medium text-text-primary">
-                Texto del anuncio <span className="text-text-muted font-normal">(opcional)</span>
+                {templateType === 'combo'
+                  ? 'Título del combo'
+                  : <span>Texto del anuncio <span className="text-text-muted font-normal">(opcional)</span></span>
+                }
               </label>
               <textarea
                 className="w-full border border-border rounded-btn px-3 py-2 text-sm bg-surface text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/30 resize-none"
                 rows={4}
-                placeholder="Ej: ¡Recién horneados todos los días!"
+                placeholder={templateType === 'combo' ? 'Ej: Ofertas de la semana' : 'Ej: ¡Recién horneados todos los días!'}
                 value={adText}
                 onChange={e => setAdText(e.target.value)}
               />
@@ -127,7 +258,7 @@ export default function AdminAdsPage() {
             {/* Botón descargar */}
             <Button
               onClick={handleDownload}
-              disabled={!selectedProduct || downloading}
+              disabled={isDownloadDisabled}
               className="flex items-center justify-center gap-2"
             >
               {downloading ? (
@@ -148,6 +279,8 @@ export default function AdminAdsPage() {
                 adText={adText}
                 format={format}
                 flierRef={flierRef}
+                templateType={templateType}
+                comboItems={comboItems}
               />
             </div>
           </div>
