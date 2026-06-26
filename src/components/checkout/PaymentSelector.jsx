@@ -1,4 +1,5 @@
-import { Banknote, ArrowRightLeft, Smartphone, Store, Truck, Sun, Coffee, Sunset } from 'lucide-react'
+import { useEffect } from 'react'
+import { Banknote, ArrowRightLeft, Smartphone, Store, Truck, Sunset } from 'lucide-react'
 
 const PAYMENT_OPTIONS = [
   { value: 'efectivo',      label: 'Efectivo',      icon: Banknote },
@@ -12,9 +13,7 @@ const DELIVERY_OPTIONS = [
 ]
 
 const SCHEDULE_OPTIONS = [
-  { value: 'manana',   label: 'Mañana',   description: '8:00 – 12:00',  icon: Sun },
-  { value: 'mediodia', label: 'Mediodía', description: '12:00 – 15:00', icon: Coffee },
-  { value: 'tarde',    label: 'Tarde',    description: '15:00 – 19:00', icon: Sunset },
+  { value: 'tarde', label: 'Tarde', description: '15:00 – 19:00', icon: Sunset },
 ]
 
 export function PaymentMethodSelector({ value, onChange }) {
@@ -93,36 +92,42 @@ export function DeliveryMethodSelector({ value, onChange, deliveryFee }) {
   )
 }
 
-export function ScheduleSelector({ value, onChange }) {
+function OptionButton({ selected, onClick, children }) {
   return (
-    <div className="grid grid-cols-3 gap-2">
-      {SCHEDULE_OPTIONS.map(({ value: v, label, description, icon: Icon }) => {
-        const selected = value === v
-        return (
-          <button
-            key={v}
-            type="button"
-            onClick={() => onChange(v)}
-            className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all duration-150 focus:outline-none ${
-              selected
-                ? 'border-[#7C5CBF] bg-[#F3EEFF]'
-                : 'border-stone-200 bg-white hover:border-stone-300'
-            }`}
-          >
-            <div className={`w-9 h-9 rounded-full flex items-center justify-center transition-colors ${
-              selected ? 'bg-[#7C5CBF]' : 'bg-stone-100'
-            }`}>
-              <Icon className={`w-4 h-4 ${selected ? 'text-white' : 'text-stone-400'}`} strokeWidth={2} />
-            </div>
-            <div className="text-center">
-              <p className={`text-xs font-semibold ${selected ? 'text-[#7C5CBF]' : 'text-stone-700'}`}>
-                {label}
-              </p>
-              <p className="text-[10px] text-stone-400 mt-0.5">{description}</p>
-            </div>
-          </button>
-        )
-      })}
+    <button
+      type="button"
+      onClick={onClick}
+      className={`w-full flex flex-col items-center gap-2 rounded-xl border-2 transition-all duration-150 focus:outline-none ${
+        selected
+          ? 'border-[#7C5CBF] bg-[#F3EEFF]'
+          : 'border-stone-200 bg-white hover:border-stone-300'
+      }`}
+    >
+      {children}
+    </button>
+  )
+}
+
+export function ScheduleSelector({ value, onChange }) {
+  useEffect(() => {
+    if (!value || value !== 'tarde') {
+      onChange('tarde')
+    }
+  }, [])
+
+  return (
+    <div className="w-full">
+      <OptionButton selected={true} onClick={() => onChange('tarde')}>
+        <div className="flex flex-col items-center gap-2 p-6 w-full">
+          <div className="w-10 h-10 rounded-full flex items-center justify-center transition-colors bg-[#7C5CBF]">
+            <Sunset className="w-5 h-5 text-white" strokeWidth={2} />
+          </div>
+          <div className="text-center">
+            <p className="text-sm font-semibold text-[#7C5CBF]">Tarde</p>
+            <p className="text-xs text-stone-400 mt-0.5">15:00 – 19:00</p>
+          </div>
+        </div>
+      </OptionButton>
     </div>
   )
 }

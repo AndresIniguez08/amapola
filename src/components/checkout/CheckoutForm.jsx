@@ -105,7 +105,7 @@ export default function CheckoutForm() {
     defaultValues: {
       paymentMethod: "efectivo",
       deliveryMethod: "retiro",
-      schedule: "manana",
+      schedule: "tarde",
     },
   });
 
