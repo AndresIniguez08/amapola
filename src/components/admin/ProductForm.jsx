@@ -1,83 +1,98 @@
-import { useForm, Controller } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-import { useState, useEffect } from 'react'
-import { X, Pencil, Trash2, Plus } from 'lucide-react'
-import toast from 'react-hot-toast'
-import { supabase } from '../../lib/supabase'
-import Button from '../ui/Button'
-import ImageUploader from './ImageUploader'
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useState, useEffect } from "react";
+import { X, Pencil, Trash2, Plus } from "lucide-react";
+import toast from "react-hot-toast";
+import { supabase } from "../../lib/supabase";
+import Button from "../ui/Button";
+import ImageUploader from "./ImageUploader";
 
-const PRESET_TAGS = ['Sin TACC', 'Vegano', 'Integral', 'Destacado']
+const PRESET_TAGS = ["Sin TACC", "Vegano", "Integral", "Destacado"];
 
 const schema = z.object({
-  name: z.string().min(2, 'Requerido'),
+  name: z.string().min(2, "Requerido"),
   description: z.string().optional(),
-  price: z.coerce.number().positive('Precio inválido'),
+  price: z.coerce.number().positive("Precio inválido"),
   cost: z.coerce.number().min(0).optional(),
-  category: z.string().min(1, 'Elegí una categoría'),
+  category: z.string().min(1, "Elegí una categoría"),
   is_available: z.boolean(),
   is_featured: z.boolean(),
   image_url: z.string().optional(),
   tags: z.array(z.string()).optional(),
-})
+});
 
 function Toggle({ checked, onChange, label }) {
   return (
     <label className="flex items-center gap-3 cursor-pointer select-none">
       <div
         onClick={() => onChange(!checked)}
-        className={`relative w-10 h-6 rounded-full transition-colors duration-200 ${checked ? 'bg-primary' : 'bg-stone-300'}`}
+        className={`relative w-10 h-6 rounded-full transition-colors duration-200 ${checked ? "bg-primary" : "bg-stone-300"}`}
       >
         <div
-          className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200 ${checked ? 'translate-x-4' : 'translate-x-0'}`}
+          className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200 ${checked ? "translate-x-4" : "translate-x-0"}`}
         />
       </div>
       <span className="text-sm font-medium text-text-primary">{label}</span>
     </label>
-  )
+  );
 }
 
-export default function ProductForm({ product, onSuccess, onCancel, categories = [] }) {
-  const [loading, setLoading] = useState(false)
-  const isEdit = Boolean(product?.id)
+export default function ProductForm({
+  product,
+  onSuccess,
+  onCancel,
+  categories = [],
+}) {
+  const [loading, setLoading] = useState(false);
+  const isEdit = Boolean(product?.id);
 
   // --- Variants state ---
-  const [variants, setVariants] = useState([])
-  const [variantsLoading, setVariantsLoading] = useState(false)
-  const [newVariant, setNewVariant] = useState({ name: '', price: '', cost: '', image_url: '' })
-  const [addingVariant, setAddingVariant] = useState(false)
-  const [editingVariantId, setEditingVariantId] = useState(null)
-  const [editVariant, setEditVariant] = useState({ name: '', price: '', cost: '', image_url: '' })
+  const [variants, setVariants] = useState([]);
+  const [variantsLoading, setVariantsLoading] = useState(false);
+  const [newVariant, setNewVariant] = useState({
+    name: "",
+    price: "",
+    cost: "",
+    image_url: "",
+  });
+  const [addingVariant, setAddingVariant] = useState(false);
+  const [editingVariantId, setEditingVariantId] = useState(null);
+  const [editVariant, setEditVariant] = useState({
+    name: "",
+    price: "",
+    cost: "",
+    image_url: "",
+  });
 
   useEffect(() => {
-    if (!isEdit) return
-    loadVariants()
-  }, [])
+    if (!isEdit) return;
+    loadVariants();
+  }, []);
 
   async function loadVariants() {
-    setVariantsLoading(true)
+    setVariantsLoading(true);
     try {
       const { data, error } = await supabase
-        .from('variants')
-        .select('*')
-        .eq('product_id', product.id)
-        .order('position')
-      if (error) throw error
-      setVariants(data ?? [])
+        .from("variants")
+        .select("*")
+        .eq("product_id", product.id)
+        .order("position");
+      if (error) throw error;
+      setVariants(data ?? []);
     } catch (err) {
-      toast.error(err.message)
+      toast.error(err.message);
     } finally {
-      setVariantsLoading(false)
+      setVariantsLoading(false);
     }
   }
 
   async function handleAddVariant() {
-    if (!newVariant.name.trim()) return
-    setAddingVariant(true)
+    if (!newVariant.name.trim()) return;
+    setAddingVariant(true);
     try {
       const { data, error } = await supabase
-        .from('variants')
+        .from("variants")
         .insert({
           product_id: product.id,
           name: newVariant.name.trim(),
@@ -88,76 +103,83 @@ export default function ProductForm({ product, onSuccess, onCancel, categories =
           is_active: true,
         })
         .select()
-        .single()
-      if (error) throw error
-      setVariants(v => [...v, data])
-      setNewVariant({ name: '', price: '', cost: '', image_url: '' })
-      toast.success('Variante agregada')
+        .single();
+      if (error) throw error;
+      setVariants((v) => [...v, data]);
+      setNewVariant({ name: "", price: "", cost: "", image_url: "" });
+      toast.success("Variante agregada");
     } catch (err) {
-      toast.error(err.message)
+      toast.error(err.message);
     } finally {
-      setAddingVariant(false)
+      setAddingVariant(false);
     }
   }
 
   async function handleToggleVariant(variant) {
     try {
       const { error } = await supabase
-        .from('variants')
+        .from("variants")
         .update({ is_active: !variant.is_active })
-        .eq('id', variant.id)
-      if (error) throw error
-      setVariants(v =>
-        v.map(vr => vr.id === variant.id ? { ...vr, is_active: !vr.is_active } : vr),
-      )
+        .eq("id", variant.id);
+      if (error) throw error;
+      setVariants((v) =>
+        v.map((vr) =>
+          vr.id === variant.id ? { ...vr, is_active: !vr.is_active } : vr,
+        ),
+      );
     } catch (err) {
-      toast.error(err.message)
+      toast.error(err.message);
     }
   }
 
   async function handleDeleteVariant(variant) {
-    if (!window.confirm(`¿Eliminar la variante "${variant.name}"?`)) return
+    if (!window.confirm(`¿Eliminar la variante "${variant.name}"?`)) return;
     try {
-      const { error } = await supabase.from('variants').delete().eq('id', variant.id)
-      if (error) throw error
-      setVariants(v => v.filter(vr => vr.id !== variant.id))
-      toast.success('Variante eliminada')
+      const { error } = await supabase
+        .from("variants")
+        .delete()
+        .eq("id", variant.id);
+      if (error) throw error;
+      setVariants((v) => v.filter((vr) => vr.id !== variant.id));
+      toast.success("Variante eliminada");
     } catch (err) {
-      toast.error(err.message)
+      toast.error(err.message);
     }
   }
 
   function startEditVariant(variant) {
-    setEditingVariantId(variant.id)
+    setEditingVariantId(variant.id);
     setEditVariant({
       name: variant.name,
-      price: variant.price !== null ? String(variant.price) : '',
-      cost: variant.cost !== null ? String(variant.cost) : '0',
-      image_url: variant.image_url ?? '',
-    })
+      price: variant.price !== null ? String(variant.price) : "",
+      cost: variant.cost !== null ? String(variant.cost) : "0",
+      image_url: variant.image_url ?? "",
+    });
   }
 
   async function handleSaveEditVariant() {
-    if (!editVariant.name.trim()) return
+    if (!editVariant.name.trim()) return;
     try {
       const updates = {
         name: editVariant.name.trim(),
         price: editVariant.price ? Number(editVariant.price) : null,
         cost: editVariant.cost ? Number(editVariant.cost) : 0,
         image_url: editVariant.image_url || null,
-      }
+      };
       const { error } = await supabase
-        .from('variants')
+        .from("variants")
         .update(updates)
-        .eq('id', editingVariantId)
-      if (error) throw error
-      setVariants(v =>
-        v.map(vr => vr.id === editingVariantId ? { ...vr, ...updates } : vr),
-      )
-      setEditingVariantId(null)
-      toast.success('Variante actualizada')
+        .eq("id", editingVariantId);
+      if (error) throw error;
+      setVariants((v) =>
+        v.map((vr) =>
+          vr.id === editingVariantId ? { ...vr, ...updates } : vr,
+        ),
+      );
+      setEditingVariantId(null);
+      toast.success("Variante actualizada");
     } catch (err) {
-      toast.error(err.message)
+      toast.error(err.message);
     }
   }
 
@@ -172,55 +194,58 @@ export default function ProductForm({ product, onSuccess, onCancel, categories =
   } = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
-      name: product?.name ?? '',
-      description: product?.description ?? '',
-      price: product?.price ?? '',
+      name: product?.name ?? "",
+      description: product?.description ?? "",
+      price: product?.price ?? "",
       cost: product?.cost ?? 0,
-      category: product?.category ?? '',
+      category: product?.category ?? "",
       is_available: product?.is_available ?? true,
       is_featured: product?.is_featured ?? false,
-      image_url: product?.image_url ?? '',
+      image_url: product?.image_url ?? "",
       tags: product?.tags ?? [],
     },
-  })
+  });
 
-  const tags = watch('tags') ?? []
+  const tags = watch("tags") ?? [];
 
   function toggleTag(tag) {
-    const current = watch('tags') ?? []
+    const current = watch("tags") ?? [];
     if (current.includes(tag)) {
-      setValue('tags', current.filter(t => t !== tag))
+      setValue(
+        "tags",
+        current.filter((t) => t !== tag),
+      );
     } else {
-      setValue('tags', [...current, tag])
+      setValue("tags", [...current, tag]);
     }
   }
 
   async function onSubmit(data) {
-    setLoading(true)
+    setLoading(true);
     try {
       const payload = {
         ...data,
         price: Number(data.price),
         updated_at: new Date().toISOString(),
-      }
+      };
 
       if (isEdit) {
         const { error } = await supabase
-          .from('products')
+          .from("products")
           .update(payload)
-          .eq('id', product.id)
-        if (error) throw error
-        toast.success('Producto actualizado')
+          .eq("id", product.id);
+        if (error) throw error;
+        toast.success("Producto actualizado");
       } else {
-        const { error } = await supabase.from('products').insert(payload)
-        if (error) throw error
-        toast.success('Producto creado')
+        const { error } = await supabase.from("products").insert(payload);
+        if (error) throw error;
+        toast.success("Producto creado");
       }
-      onSuccess()
+      onSuccess();
     } catch (err) {
-      toast.error(err.message)
+      toast.error(err.message);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
 
@@ -233,18 +258,22 @@ export default function ProductForm({ product, onSuccess, onCancel, categories =
             Nombre <span className="text-error">*</span>
           </label>
           <input
-            {...register('name')}
-            placeholder="Medialunas de manteca"
+            {...register("name")}
+            placeholder="Focaccia de romero"
             className="w-full px-4 py-2.5 text-sm border border-border rounded-btn focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
           />
-          {errors.name && <p className="text-error text-xs mt-1">{errors.name.message}</p>}
+          {errors.name && (
+            <p className="text-error text-xs mt-1">{errors.name.message}</p>
+          )}
         </div>
 
         {/* Description */}
         <div className="sm:col-span-2">
-          <label className="block text-sm font-semibold text-text-primary mb-1.5">Descripción</label>
+          <label className="block text-sm font-semibold text-text-primary mb-1.5">
+            Descripción
+          </label>
           <textarea
-            {...register('description')}
+            {...register("description")}
             rows={2}
             placeholder="Descripción corta del producto..."
             className="w-full px-4 py-2.5 text-sm border border-border rounded-btn focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none"
@@ -257,21 +286,25 @@ export default function ProductForm({ product, onSuccess, onCancel, categories =
             Precio (ARS) <span className="text-error">*</span>
           </label>
           <input
-            {...register('price')}
+            {...register("price")}
             type="number"
             inputMode="numeric"
             step="0.01"
             placeholder="1200"
             className="w-full px-4 py-2.5 text-sm border border-border rounded-btn focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
           />
-          {errors.price && <p className="text-error text-xs mt-1">{errors.price.message}</p>}
+          {errors.price && (
+            <p className="text-error text-xs mt-1">{errors.price.message}</p>
+          )}
         </div>
 
         {/* Cost */}
         <div>
-          <label className="block text-sm font-semibold text-text-primary mb-1.5">Costo (ARS)</label>
+          <label className="block text-sm font-semibold text-text-primary mb-1.5">
+            Costo (ARS)
+          </label>
           <input
-            {...register('cost')}
+            {...register("cost")}
             type="number"
             inputMode="numeric"
             step="0.01"
@@ -286,32 +319,43 @@ export default function ProductForm({ product, onSuccess, onCancel, categories =
             Categoría <span className="text-error">*</span>
           </label>
           <select
-            {...register('category')}
+            {...register("category")}
             className="w-full px-4 py-2.5 text-sm border border-border rounded-btn focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-surface"
           >
-            {categories.length === 0
-              ? <option value="" disabled>Cargando categorías...</option>
-              : <option value="">Seleccioná</option>
-            }
-            {categories.map(c => <option key={c.id} value={c.name}>{c.name}</option>)}
+            {categories.length === 0 ? (
+              <option value="" disabled>
+                Cargando categorías...
+              </option>
+            ) : (
+              <option value="">Seleccioná</option>
+            )}
+            {categories.map((c) => (
+              <option key={c.id} value={c.name}>
+                {c.name}
+              </option>
+            ))}
           </select>
-          {errors.category && <p className="text-error text-xs mt-1">{errors.category.message}</p>}
+          {errors.category && (
+            <p className="text-error text-xs mt-1">{errors.category.message}</p>
+          )}
         </div>
       </div>
 
       {/* Tags */}
       <div>
-        <label className="block text-sm font-semibold text-text-primary mb-2">Tags</label>
+        <label className="block text-sm font-semibold text-text-primary mb-2">
+          Tags
+        </label>
         <div className="flex flex-wrap gap-2">
-          {PRESET_TAGS.map(tag => (
+          {PRESET_TAGS.map((tag) => (
             <button
               key={tag}
               type="button"
               onClick={() => toggleTag(tag)}
               className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
                 tags.includes(tag)
-                  ? 'bg-primary text-white border-primary'
-                  : 'bg-surface text-text-secondary border-border hover:border-primary'
+                  ? "bg-primary text-white border-primary"
+                  : "bg-surface text-text-secondary border-border hover:border-primary"
               }`}
             >
               {tag}
@@ -326,21 +370,31 @@ export default function ProductForm({ product, onSuccess, onCancel, categories =
           name="is_available"
           control={control}
           render={({ field }) => (
-            <Toggle checked={field.value} onChange={field.onChange} label="Disponible" />
+            <Toggle
+              checked={field.value}
+              onChange={field.onChange}
+              label="Disponible"
+            />
           )}
         />
         <Controller
           name="is_featured"
           control={control}
           render={({ field }) => (
-            <Toggle checked={field.value} onChange={field.onChange} label="Destacado" />
+            <Toggle
+              checked={field.value}
+              onChange={field.onChange}
+              label="Destacado"
+            />
           )}
         />
       </div>
 
       {/* Image */}
       <div>
-        <label className="block text-sm font-semibold text-text-primary mb-2">Imagen</label>
+        <label className="block text-sm font-semibold text-text-primary mb-2">
+          Imagen
+        </label>
         <Controller
           name="image_url"
           control={control}
@@ -363,7 +417,7 @@ export default function ProductForm({ product, onSuccess, onCancel, categories =
         ) : (
           <div className="space-y-3">
             {/* Existing variants */}
-            {variants.map(variant => (
+            {variants.map((variant) => (
               <div key={variant.id}>
                 {editingVariantId === variant.id ? (
                   /* Inline edit form */
@@ -375,15 +429,27 @@ export default function ProductForm({ product, onSuccess, onCancel, categories =
                         </label>
                         <input
                           value={editVariant.name}
-                          onChange={e => setEditVariant(f => ({ ...f, name: e.target.value }))}
+                          onChange={(e) =>
+                            setEditVariant((f) => ({
+                              ...f,
+                              name: e.target.value,
+                            }))
+                          }
                           className="w-full px-3 py-2 text-sm border border-border rounded-btn focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-semibold text-text-primary mb-1">Precio</label>
+                        <label className="block text-xs font-semibold text-text-primary mb-1">
+                          Precio
+                        </label>
                         <input
                           value={editVariant.price}
-                          onChange={e => setEditVariant(f => ({ ...f, price: e.target.value }))}
+                          onChange={(e) =>
+                            setEditVariant((f) => ({
+                              ...f,
+                              price: e.target.value,
+                            }))
+                          }
                           type="number"
                           step="0.01"
                           placeholder="Igual que el producto"
@@ -391,10 +457,17 @@ export default function ProductForm({ product, onSuccess, onCancel, categories =
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-semibold text-text-primary mb-1">Costo</label>
+                        <label className="block text-xs font-semibold text-text-primary mb-1">
+                          Costo
+                        </label>
                         <input
                           value={editVariant.cost}
-                          onChange={e => setEditVariant(f => ({ ...f, cost: e.target.value }))}
+                          onChange={(e) =>
+                            setEditVariant((f) => ({
+                              ...f,
+                              cost: e.target.value,
+                            }))
+                          }
                           type="number"
                           step="0.01"
                           placeholder="0"
@@ -403,10 +476,14 @@ export default function ProductForm({ product, onSuccess, onCancel, categories =
                       </div>
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold text-text-primary mb-1">Imagen</label>
+                      <label className="block text-xs font-semibold text-text-primary mb-1">
+                        Imagen
+                      </label>
                       <ImageUploader
                         value={editVariant.image_url}
-                        onChange={url => setEditVariant(f => ({ ...f, image_url: url }))}
+                        onChange={(url) =>
+                          setEditVariant((f) => ({ ...f, image_url: url }))
+                        }
                       />
                     </div>
                     <div className="flex gap-2">
@@ -447,15 +524,23 @@ export default function ProductForm({ product, onSuccess, onCancel, categories =
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-text-primary truncate">{variant.name}</p>
+                      <p className="text-sm font-medium text-text-primary truncate">
+                        {variant.name}
+                      </p>
                       <p className="text-xs text-text-muted">
-                        {variant.price !== null
-                          ? `$${variant.price}`
-                          : <span className="text-stone-400">Precio base</span>
-                        }
+                        {variant.price !== null ? (
+                          `$${variant.price}`
+                        ) : (
+                          <span className="text-stone-400">Precio base</span>
+                        )}
                       </p>
                       <p className="text-xs text-stone-400">
-                        Costo: {variant.cost > 0 ? `$${variant.cost}` : <span className="text-stone-300">—</span>}
+                        Costo:{" "}
+                        {variant.cost > 0 ? (
+                          `$${variant.cost}`
+                        ) : (
+                          <span className="text-stone-300">—</span>
+                        )}
                       </p>
                     </div>
                     <div className="flex items-center gap-2 flex-shrink-0">
@@ -488,7 +573,9 @@ export default function ProductForm({ product, onSuccess, onCancel, categories =
 
             {/* Add new variant form */}
             <div className="bg-stone-50 rounded-xl border border-dashed border-stone-300 p-3 space-y-3">
-              <p className="text-xs font-semibold text-text-muted">Agregar variante</p>
+              <p className="text-xs font-semibold text-text-muted">
+                Agregar variante
+              </p>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
                   <label className="block text-xs font-semibold text-text-primary mb-1">
@@ -496,16 +583,22 @@ export default function ProductForm({ product, onSuccess, onCancel, categories =
                   </label>
                   <input
                     value={newVariant.name}
-                    onChange={e => setNewVariant(f => ({ ...f, name: e.target.value }))}
+                    onChange={(e) =>
+                      setNewVariant((f) => ({ ...f, name: e.target.value }))
+                    }
                     placeholder="Ej: Docena"
                     className="w-full px-3 py-2 text-sm border border-border rounded-btn focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-text-primary mb-1">Precio</label>
+                  <label className="block text-xs font-semibold text-text-primary mb-1">
+                    Precio
+                  </label>
                   <input
                     value={newVariant.price}
-                    onChange={e => setNewVariant(f => ({ ...f, price: e.target.value }))}
+                    onChange={(e) =>
+                      setNewVariant((f) => ({ ...f, price: e.target.value }))
+                    }
                     type="number"
                     step="0.01"
                     placeholder="Igual que el producto"
@@ -513,10 +606,14 @@ export default function ProductForm({ product, onSuccess, onCancel, categories =
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-text-primary mb-1">Costo</label>
+                  <label className="block text-xs font-semibold text-text-primary mb-1">
+                    Costo
+                  </label>
                   <input
                     value={newVariant.cost}
-                    onChange={e => setNewVariant(f => ({ ...f, cost: e.target.value }))}
+                    onChange={(e) =>
+                      setNewVariant((f) => ({ ...f, cost: e.target.value }))
+                    }
                     type="number"
                     step="0.01"
                     placeholder="0"
@@ -525,10 +622,14 @@ export default function ProductForm({ product, onSuccess, onCancel, categories =
                 </div>
               </div>
               <div>
-                <label className="block text-xs font-semibold text-text-primary mb-1">Imagen</label>
+                <label className="block text-xs font-semibold text-text-primary mb-1">
+                  Imagen
+                </label>
                 <ImageUploader
                   value={newVariant.image_url}
-                  onChange={url => setNewVariant(f => ({ ...f, image_url: url }))}
+                  onChange={(url) =>
+                    setNewVariant((f) => ({ ...f, image_url: url }))
+                  }
                 />
               </div>
               <Button
@@ -550,13 +651,25 @@ export default function ProductForm({ product, onSuccess, onCancel, categories =
 
       {/* Actions */}
       <div className="flex gap-3 pt-2">
-        <Button type="button" variant="ghost" size="md" onClick={onCancel} className="flex-1">
+        <Button
+          type="button"
+          variant="ghost"
+          size="md"
+          onClick={onCancel}
+          className="flex-1"
+        >
           Cancelar
         </Button>
-        <Button type="submit" variant="primary" size="md" loading={loading} className="flex-1">
-          {isEdit ? 'Guardar cambios' : 'Crear producto'}
+        <Button
+          type="submit"
+          variant="primary"
+          size="md"
+          loading={loading}
+          className="flex-1"
+        >
+          {isEdit ? "Guardar cambios" : "Crear producto"}
         </Button>
       </div>
     </form>
-  )
+  );
 }
