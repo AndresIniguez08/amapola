@@ -191,7 +191,7 @@ export default function CheckoutForm() {
             />
             <textarea
               {...register("notes")}
-              placeholder="Observaciones (sin sal, sin TACC, etc.)"
+              placeholder="Observaciones (sin sal,  etc.)"
               rows={3}
               className="w-full pl-10 pr-4 py-3.5 text-sm bg-white border-2 border-stone-200 hover:border-stone-300 rounded-xl text-stone-800 placeholder-stone-400 focus:outline-none focus:border-[#7C5CBF] transition-all duration-200 resize-none"
             />

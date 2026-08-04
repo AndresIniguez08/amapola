@@ -8,7 +8,7 @@ import { supabase } from "../../lib/supabase";
 import Button from "../ui/Button";
 import ImageUploader from "./ImageUploader";
 
-const PRESET_TAGS = ["Sin TACC", "Vegano", "Integral", "Destacado"];
+const PRESET_TAGS = ["Integral", "Destacado"];
 
 const schema = z.object({
   name: z.string().min(2, "Requerido"),
